@@ -1,10 +1,15 @@
 <?php
-
 /*
 |---------------------------------------------------------------------------------------------------
-| Initialize App
+| Debug
 |---------------------------------------------------------------------------------------------------
 */
-require_once dirname( __FILE__ ) . '/slimer/Core/autoload.php';
-
-$app->run();
+//You can also use the d() function to debug
+if( ! function_exists( 'debug' ) ){
+	function debug($var){
+	  echo '<br>';
+	  echo '<pre>';
+	  print_r($var);
+	  echo '</pre>';
+	}
+}
