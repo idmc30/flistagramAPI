@@ -1,2 +1,6 @@
-.idea/*
-composer.lock
+# Prerequisites
+
+.idea/
+cache/**
+log/**
+vendor/

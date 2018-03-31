@@ -1,10 +1,12 @@
 <?php
 
+$globals = $container->get('view')->getEnvironment();
+
 /*
 |---------------------------------------------------------------------------------------------------
-| Initialize App
+| Flash variable for all views
 |---------------------------------------------------------------------------------------------------
 */
-require_once dirname( __FILE__ ) . '/slimer/Core/autoload.php';
+$globals->addGlobal( 'flash', $container->flash );
 
-$app->run();
+
