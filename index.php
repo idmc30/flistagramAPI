@@ -1,10 +1,4 @@
-<?php
+<?php namespace Snipe\Core;
 
-/*
-|---------------------------------------------------------------------------------------------------
-| Initialize App
-|---------------------------------------------------------------------------------------------------
-*/
-require_once dirname( __FILE__ ) . '/slimer/Core/autoload.php';
-
-$app->run();
+require_once 'base/init.php';
+$app = new App;

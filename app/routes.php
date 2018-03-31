@@ -1,33 +1,28 @@
-<?php
-/*
-|---------------------------------------------------------------------------------------------------
-| Routes
-|---------------------------------------------------------------------------------------------------
-*/
-$app->get( '/', 'PageController:home' )->setName( 'home' );
+<?php namespace Snipe\Core;
 
+//Example of routes
 
-//Route middleware
-$app->get( '/admin', 'AdminController:dashboard' )->add( new App\Middlewares\AdminMiddleware() );
-
-
-//Route groups
-//https://www.slimframework.com/docs/v3/objects/router.html#route-groups
-$app->group( '/user/{id:[0-9]+}', function(){
-
-	$this->map(['GET', 'DELETE', 'PATCH', 'PUT'], '', function ( $request, $response, $args ) {
-		$home_url = $request->getUri()->getBaseurl();
-		$back = '<br><a href="'.$home_url.'">Home page</a>';
-
-		return 'User id: '.$args['id'].$back;
-  })->setName('user');
+//Ruta Inicial del Proyecto
+Route::get('/',function(){
+	view('home/index');
 });
 
-//Route redirection
-$app->get( '/redirect', function( $request, $response, $args ){
-	//Sample log message (Monolog)
-	$this->get( 'logger' )->info( 'Slimer Framework' );
-
-	$this->flash->addMessage( 'success', 'Redirection success' );
-	return $response->withRedirect( $this->get( 'router' )->pathFor( 'home' ) );
+Route::get('function',function(){
+	//Puedes definir rutas con nombres diferentes
 });
+
+
+Route::post('user/register',function(){
+	//Puedes definir rutas de tipo POST
+});
+
+Route::get('home/index/{id}/{var}',function($id,$var = null){
+	//Si deseas que un parametro sea obligatorio solo debes poner null a la variable
+	echo 'Ruta con Parametros: '.$id.'-'.$var;
+});
+
+//Ruta asignada a controlador y funcion
+Route::get('test','Prueba@index');
+
+//Controlador RestFul asignado a una ruta
+Route::controller('restfules','Restful');
