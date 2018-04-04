@@ -4,7 +4,7 @@
 | Routes
 |---------------------------------------------------------------------------------------------------
 */
-$app->get('/', 'PageController:home')->setName('home');
+/*$app->get('/', 'PageController:home')->setName('home');
 
 
 //Route middleware
@@ -30,11 +30,15 @@ $app->get('/redirect', function ( $request, $response, $args ) {
 
 	$this->flash->addMessage('success', 'Redirection success');
 	return $response->withRedirect($this->get('router')->pathFor('home'));
-});
+});*/
 
 
 //Route groups
+use App\Middlewares\AuthMiddleware;
+
 $app->group('/api/v1', function () {
-	$this->get('/users', 'UserController:all_users');
-	$this->get('/users/{id}', 'UserController:user');
+	$this->get('/user', 'UserController:all_users')->add( new AuthMiddleware());
+	$this->get('/user/{id}', 'UserController:user');
+	$this->post('/user/store', 'UserController:store');
 });
+
