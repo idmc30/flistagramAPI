@@ -37,8 +37,15 @@ $app->get('/redirect', function ( $request, $response, $args ) {
 use App\Middlewares\AuthMiddleware;
 
 $app->group('/api/v1', function () {
-	$this->get('/user', 'UserController:all_users')->add( new AuthMiddleware());
-	$this->get('/user/{id}', 'UserController:user');
-	$this->post('/user/store', 'UserController:store');
+
+	$this->post('/token', 'AuthController:token');
+
+	$this->group('/user', function () {
+		$this->get('/all', 'UserController:all_users')->add(new AuthMiddleware());
+		$this->get('/{id}', 'UserController:user_id')->add(new AuthMiddleware());
+		$this->get('/', 'UserController:user')->add(new AuthMiddleware());
+		$this->post('/store', 'UserController:store')->add(new AuthMiddleware());
+	});
+
 });
 

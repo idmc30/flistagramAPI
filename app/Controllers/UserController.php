@@ -27,6 +27,7 @@ class UserController extends BaseController
 		if ( !empty($users) ) {
 			$result[ 'status' ] = true;
 			$result[ 'items' ] = $users->toArray();
+			$result[ 'message' ] = 'Usuarios entregados correctamente.';
 			return $response->withJson($result, 200);
 		} else {
 			$result[ 'message' ] = 'Users not found';
@@ -40,6 +41,28 @@ class UserController extends BaseController
 	| User
 	|---------------------------------------------------------------------------------------------------
 	*/
+	public function user_id ( ServerRequestInterface $request, ResponseInterface $response, $args )
+	{
+		$result = array(
+			'status' => false,
+			'item' => array(),
+			'message' => '',
+		);
+
+		$user = User::find($args[ 'id' ]);
+
+		if ( !empty($user) ) {
+			$result[ 'time' ] =  date ("H:i",time()) ;
+			$result[ 'status' ] = true;
+			$result[ 'item' ] = $user->toArray();
+			$result[ 'message' ] = 'Datos entregados correctamente';
+			return $response->withJson($result, 200);
+		} else {
+			$result[ 'message' ] = 'User not found';
+			return $response->withJson($result, 404);
+		}
+	}
+
 	public function user ( ServerRequestInterface $request, ResponseInterface $response, $args )
 	{
 		$result = array(
@@ -53,6 +76,7 @@ class UserController extends BaseController
 		if ( !empty($user) ) {
 			$result[ 'status' ] = true;
 			$result[ 'item' ] = $user->toArray();
+			$result[ 'message' ] = 'Datos entregados correctamente';
 			return $response->withJson($result, 200);
 		} else {
 			$result[ 'message' ] = 'User not found';
@@ -73,11 +97,13 @@ class UserController extends BaseController
 			'item' => array(),
 			'message' => '',
 		);
+
 		$body = $request->getParsedBody();
 		$username = $body[ 'username' ];
 		$name = $body[ 'name' ];
 		$password = hash('sha256', $body[ 'password' ]);
 		$email = $body[ 'email' ];
+
 		if ( trim($username) != '' && trim($name) != '' && trim($password) != '' && trim($email) != '' ) {
 			try {
 				$user = new User();
@@ -89,6 +115,7 @@ class UserController extends BaseController
 				$result[ 'status' ] = true;
 				$result[ 'message' ] = 'Usuario creado';
 				$result[ 'item' ] = $user->toArray();
+				$result[ 'message' ] = 'Usuario creado correctamente';
 				return $response->withJson($result, 200);
 			} catch ( \Exception $ex ) {
 				$result[ 'message' ] = 'Error al crear usuario';

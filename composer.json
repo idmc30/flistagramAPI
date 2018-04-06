@@ -12,7 +12,8 @@
   "type": "project",
   "require": {
     "maxlopez/slimer-core": "*",
-    "illuminate/database": "^5.6"
+    "illuminate/database": "^5.6",
+    "firebase/php-jwt": "^5.0"
   },
   "require-dev": {
     "kint-php/kint": "^2.1"
