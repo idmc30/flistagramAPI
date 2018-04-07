@@ -43,8 +43,8 @@ $app->group('/api/v1', function () {
 
 	$this->group('/user', function () {
 		$this->get('/all', 'UserController:all_users')->add(new AuthMiddleware());
-		$this->get('/{id}', 'UserController:user_id')->add(new AuthMiddleware());
-		$this->get('/', 'UserController:user')->add(new AuthMiddleware());
+		$this->get('/d/{id}', 'UserController:user_id')->add(new AuthMiddleware());
+		$this->get('/midata', 'UserController:user')->add(new AuthMiddleware());
 		$this->post('/store', 'UserController:store')->add(new AuthMiddleware());
 	});
 

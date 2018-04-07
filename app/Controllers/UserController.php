@@ -71,7 +71,9 @@ class UserController extends BaseController
 			'message' => '',
 		);
 
-		$user = User::find($args[ 'id' ]);
+		$userSession = $this->session->get('user');
+        $username = $userSession->username;
+		$user = User::where('username',$username)->firstOrFail();
 
 		if ( !empty($user) ) {
 			$result[ 'status' ] = true;

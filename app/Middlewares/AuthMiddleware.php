@@ -22,6 +22,9 @@ class AuthMiddleware extends BaseMiddleware
 			$authHeader = $request->getHeaderLine('Authorization');
 			list($jwt) = sscanf($authHeader, 'Bearer %s');
 			$data_decode = JWT::decode($jwt, $this->container->get('settings')[ 'app' ][ 'key_jtw' ], array( 'HS256' ));
+            $data_decode = $data_decode->data;
+			$this->session->set('user', $data_decode);
+
 			/*
 						$username = $_SERVER[ 'PHP_AUTH_USER' ];
 						$password = hash('sha256', $_SERVER[ 'PHP_AUTH_PW' ]);
