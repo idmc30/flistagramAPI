@@ -1,2 +1,2 @@
-# slimer-framework
-PHP Framework - Slimer is an application following MVC pattern for Slim Framework 3
+# Flistagram
+Api de un mini clon de Instagram desarrolado para exposición en Flisol 2018 - Lambayeque 
