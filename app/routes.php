@@ -5,8 +5,12 @@
 |---------------------------------------------------------------------------------------------------
 */
 
+$app->get('/image', 'PageController:home');
+
 //Route groups
 use App\Middlewares\AuthMiddleware;
+
+
 
 $app->group('/api/v1', function () {
 	/* Group Account*/
@@ -25,8 +29,10 @@ $app->group('/api/v1', function () {
 		$this->post('/data/update/password', 'UserController:update_password');
 	})->add(new AuthMiddleware());
 
-	$this->group('/user', function () {
-	})->add(new AuthMiddleware());
+	$this->group('/publication', function () {
+		$this->post('/create', 'PublicationController:create')->add(new AuthMiddleware());
+		$this->get('/photo/{id}/image.jpg', 'PublicationController:image');
+	});
 
 });
 

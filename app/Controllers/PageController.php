@@ -1,14 +1,17 @@
 <?php
+
 namespace App\Controllers;
 
-class PageController extends BaseController {
+class PageController extends BaseController
+{
 
 	/*
 	|---------------------------------------------------------------------------------------------------
 	| Home
 	|---------------------------------------------------------------------------------------------------
 	*/
-	public function home( $request, $response, $args ){
+	public function home ( $request, $response, $args )
+	{
 		$data = array(
 			'app' => array(
 				'name' => 'Slimer Framework',
@@ -17,12 +20,10 @@ class PageController extends BaseController {
 			),
 		);
 
-		return $this->view( 'home/main.twig', $data );
+		return $this->view('home/main.twig', $data);
 
 		//Or use helper function
 		//return view( 'home/main.twig', $data );
 	}
-
-
 
 }

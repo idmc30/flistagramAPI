@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Includes\Helpers;
 use App\Models\User;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -10,10 +11,10 @@ class UserController extends BaseController
 {
 
 	/*
-|---------------------------------------------------------------------------------------------------
-| All users
-|---------------------------------------------------------------------------------------------------
-*/
+	|---------------------------------------------------------------------------------------------------
+	| All users
+	|---------------------------------------------------------------------------------------------------
+	*/
 	public function all_users ( ServerRequestInterface $request, ResponseInterface $response, $args )
 	{
 		$result = array(
@@ -105,7 +106,9 @@ class UserController extends BaseController
 
 		if ( trim($username) != '' && trim($name) != '' && trim($password) != '' && trim($email) != '' ) {
 			try {
-				$password = hash('sha256', $body[ 'password' ]);
+/*Verificar si es un username valido*/
+
+				$password = Helpers::makeHash($body[ 'password' ]);
 				$user = new User();
 				$user->username = $username;
 				$user->name = $name;
@@ -146,7 +149,7 @@ class UserController extends BaseController
 		$email = $body[ 'email' ];
 
 		try {
-			$password = hash('sha256', $body[ 'password' ]);
+			$password = Helpers::makeHash($body[ 'password' ]);
 			$userSession = $this->session->get('user');
 			$user = User::findOrFail($userSession->idUser);
 			$user->username = $username;
@@ -182,7 +185,7 @@ class UserController extends BaseController
 		if ( trim($last_password) != "" && trim($new_password_1) != "" && trim($new_password_2) != '' ) {
 			if ( $new_password_1 == $new_password_2 ) {
 				try {
-					$password = User::makePassword($last_password);
+					$password = Helpers::makeHash($last_password);
 					$userSession = $this->session->get('user');
 					$user = User::where('idUser', '=', $userSession->idUser)->where('password', '=', $password)->first();
 					if ( $user ) {
