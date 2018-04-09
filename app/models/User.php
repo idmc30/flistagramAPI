@@ -15,6 +15,7 @@ class User extends Model
 		"pathPhotoAvatar",
 	);
 	protected $primaryKey = 'idUser';
+	/*protected $hidden = ['password'];*/
 
 	/*
 	|---------------------------------------------------------------------------------------------------
@@ -24,5 +25,10 @@ class User extends Model
 	public function create ()
 	{
 		//DB connection and create user
+	}
+
+	public static function makePassword ( $password )
+	{
+		return hash('sha256', $password);
 	}
 }

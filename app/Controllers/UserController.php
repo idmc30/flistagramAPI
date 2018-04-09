@@ -27,7 +27,7 @@ class UserController extends BaseController
 		if ( !empty($users) ) {
 			$result[ 'status' ] = true;
 			$result[ 'items' ] = $users->toArray();
-			$result[ 'message' ] = 'Usuarios entregados correctamente.';
+			$result[ 'message' ] = 'All users';
 			return $response->withJson($result, 200);
 		} else {
 			$result[ 'message' ] = 'Users not found';
@@ -45,42 +45,39 @@ class UserController extends BaseController
 	{
 		$result = array(
 			'status' => false,
-			'item' => array(),
 			'message' => '',
 		);
-
-		$user = User::find($args[ 'id' ]);
-
-		if ( !empty($user) ) {
-			$result[ 'time' ] =  date ("H:i",time()) ;
+		try {
+			$user = User::findOrFail($args[ 'id' ]);
 			$result[ 'status' ] = true;
 			$result[ 'item' ] = $user->toArray();
-			$result[ 'message' ] = 'Datos entregados correctamente';
+			$result[ 'message' ] = 'User finding successful';
 			return $response->withJson($result, 200);
-		} else {
+		} catch ( \Exception $ex ) {
 			$result[ 'message' ] = 'User not found';
 			return $response->withJson($result, 404);
 		}
 	}
 
+	/*
+	|---------------------------------------------------------------------------------------------------
+	| User
+	|---------------------------------------------------------------------------------------------------
+	*/
 	public function user ( ServerRequestInterface $request, ResponseInterface $response, $args )
 	{
 		$result = array(
 			'status' => false,
-			'item' => array(),
 			'message' => '',
 		);
-
-		$userSession = $this->session->get('user');
-        $username = $userSession->username;
-		$user = User::where('username',$username)->firstOrFail();
-
-		if ( !empty($user) ) {
+		try {
+			$userSession = $this->session->get('user');
+			$user = User::findOrFail($userSession->idUser);
 			$result[ 'status' ] = true;
 			$result[ 'item' ] = $user->toArray();
-			$result[ 'message' ] = 'Datos entregados correctamente';
+			$result[ 'message' ] = 'User finding successful';
 			return $response->withJson($result, 200);
-		} else {
+		} catch ( \Exception $ex ) {
 			$result[ 'message' ] = 'User not found';
 			return $response->withJson($result, 404);
 		}
@@ -89,7 +86,7 @@ class UserController extends BaseController
 
 	/*
 	|---------------------------------------------------------------------------------------------------
-	| User
+	| User Save
 	|---------------------------------------------------------------------------------------------------
 	*/
 	public function store ( ServerRequestInterface $request, ResponseInterface $response, $args )
@@ -103,11 +100,12 @@ class UserController extends BaseController
 		$body = $request->getParsedBody();
 		$username = $body[ 'username' ];
 		$name = $body[ 'name' ];
-		$password = hash('sha256', $body[ 'password' ]);
+		$password = $body[ 'password' ];
 		$email = $body[ 'email' ];
 
 		if ( trim($username) != '' && trim($name) != '' && trim($password) != '' && trim($email) != '' ) {
 			try {
+				$password = hash('sha256', $body[ 'password' ]);
 				$user = new User();
 				$user->username = $username;
 				$user->name = $name;
@@ -129,4 +127,86 @@ class UserController extends BaseController
 		}
 	}
 
+	/*
+	|---------------------------------------------------------------------------------------------------
+	| User Update
+	|---------------------------------------------------------------------------------------------------
+	*/
+	public function update ( ServerRequestInterface $request, ResponseInterface $response, $args )
+	{
+		$result = array(
+			'status' => false,
+			'item' => array(),
+			'message' => '',
+		);
+
+		$body = $request->getParsedBody();
+		$username = $body[ 'username' ];
+		$name = $body[ 'name' ];
+		$email = $body[ 'email' ];
+
+		try {
+			$password = hash('sha256', $body[ 'password' ]);
+			$userSession = $this->session->get('user');
+			$user = User::findOrFail($userSession->idUser);
+			$user->username = $username;
+			$user->name = $name;
+			$user->email = $email;
+			$user->save();
+			$result[ 'status' ] = true;
+			$result[ 'item' ] = $user->toArray();
+			$result[ 'message' ] = 'User updated success';
+			return $response->withJson($result, 200);
+		} catch ( \Exception $ex ) {
+			$result[ 'message' ] = 'Error updating User';
+			return $response->withJson($result, 500);
+		}
+	}
+
+	/*
+		|---------------------------------------------------------------------------------------------------
+		| User Update Password
+		|---------------------------------------------------------------------------------------------------
+		*/
+	public function update_password ( ServerRequestInterface $request, ResponseInterface $response, $args )
+	{
+		$result = array(
+			'status' => false,
+			'message' => '',
+		);
+
+		$body = $request->getParsedBody();
+		$last_password = $body[ 'last_password' ];
+		$new_password_1 = $body[ 'new_password_1' ];
+		$new_password_2 = $body[ 'new_password_2' ];
+		if ( trim($last_password) != "" && trim($new_password_1) != "" && trim($new_password_2) != '' ) {
+			if ( $new_password_1 == $new_password_2 ) {
+				try {
+					$password = User::makePassword($last_password);
+					$userSession = $this->session->get('user');
+					$user = User::where('idUser', '=', $userSession->idUser)->where('password', '=', $password)->first();
+					if ( $user ) {
+						$user->password = User::makePassword($new_password_1);
+						$user->save();
+						$result[ 'status' ] = true;
+						$result[ 'message' ] = 'Password updated success';
+						return $response->withJson($result, 200);
+					} else {
+						$result[ 'message' ] = 'The last password is not correct';
+						return $response->withJson($result, 500);
+					}
+				} catch ( \Exception $ex ) {
+					$result[ 'message' ] = 'Error updating User';
+					$result[ 'Ex' ] = $ex->getMessage();
+					return $response->withJson($result, 500);
+				}
+			} else {
+				$result[ 'message' ] = 'Passwords do not match';
+				return $response->withJson($result, 500);
+			}
+		} else {
+			$result[ 'message' ] = 'Please send correct data';
+			return $response->withJson($result, 500);
+		}
+	}
 }

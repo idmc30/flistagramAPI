@@ -14,32 +14,18 @@ class AuthMiddleware extends BaseMiddleware
 	{
 		$result = array(
 			'status' => false,
-			'item' => array(),
 			'message' => '',
 		);
 		try {
-
 			$authHeader = $request->getHeaderLine('Authorization');
 			list($jwt) = sscanf($authHeader, 'Bearer %s');
 			$data_decode = JWT::decode($jwt, $this->container->get('settings')[ 'app' ][ 'key_jtw' ], array( 'HS256' ));
-            $data_decode = $data_decode->data;
+			$data_decode = $data_decode->data;
 			$this->session->set('user', $data_decode);
-
-			/*
-						$username = $_SERVER[ 'PHP_AUTH_USER' ];
-						$password = hash('sha256', $_SERVER[ 'PHP_AUTH_PW' ]);
-
-
-						$user = User::select('username', 'email')->where('username', '=', $username)
-							->where('password', $password)->firstOrFail();
-						$data = $user->toArray();*/
-
-			//$response['newData'] = json_encode($data_decode);
-
 			$response = $next($request, $response);
 			return $response;
 		} catch ( \Exception $ex ) {
-			$result[ 'message' ] = 'No autorizado';
+			$result[ 'message' ] = 'Not authorized';
 			$result[ 'Ex' ] = $ex->getMessage();
 			return $response->withJson($result, 404);
 		}

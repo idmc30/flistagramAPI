@@ -23,17 +23,18 @@ class AuthController extends BaseController
 
 		$body = $request->getParsedBody();
 		$username = $body[ 'username' ];
-		$password = hash('sha256', $body[ 'password' ]);
+		$password = $body[ 'password' ];
 
 		if ( trim($username) != '' && trim($password) != '' ) {
 			try {
-				$user = User::select('idUser','username', 'email')->where('username', '=', $username)
+				$password = hash('sha256', $body[ 'password' ]);
+				$user = User::select('idUser', 'username', 'email')->where('username', '=', $username)
 					->where('password', $password)->firstOrFail();
 				$jwt_data = $this->container->get('settings')[ 'app' ][ 'data_jwt' ];
 				$jwt_data[ 'data' ] = [
 					'username' => $user->username,
 					'email' => $user->email,
-                    'idUser' => $user->idUser
+					'idUser' => $user->idUser
 				];
 				$jwt = JWT::encode($jwt_data, $this->container->get('settings')[ 'app' ][ 'key_jtw' ]);
 				$result[ 'status' ] = true;
@@ -41,12 +42,12 @@ class AuthController extends BaseController
 				$result[ 'message' ] = 'Token generated successful';
 				return $response->withJson($result, 200);
 			} catch ( \Exception $ex ) {
-				$result[ 'message' ] = 'No autorizado';
+				$result[ 'message' ] = 'Not authorized';
 				$result[ 'ex' ] = $ex->getMessage();
 				return $response->withJson($result, 404);
 			}
 		} else {
-			$result[ 'message' ] = 'Por favor, envie los campos requeridos.';
+			$result[ 'message' ] = 'Please send correct data';
 			return $response->withJson($result, 500);
 		}
 	}
