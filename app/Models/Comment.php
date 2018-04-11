@@ -2,17 +2,16 @@
 
 namespace App\Models;
 
-class User extends Model
+class Comment extends Model
 {
 
-	protected $table = 'user';
+	protected $table = 'comment';
 	protected $fillable = array(
+		"idComment",
+		"text",
 		"idUser",
-		"username",
-		"name",
-		"password",
-		"email",
-		"pathPhotoAvatar",
+		"idPublication",
+		"created_at",
 	);
 	protected $primaryKey = 'idUser';
 	protected $hidden = [ 'password' ];

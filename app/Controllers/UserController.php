@@ -106,8 +106,7 @@ class UserController extends BaseController
 
 		if ( trim($username) != '' && trim($name) != '' && trim($password) != '' && trim($email) != '' ) {
 			try {
-/*Verificar si es un username valido*/
-
+				/*Verificar si es un username valido*/
 				$password = Helpers::makeHash($body[ 'password' ]);
 				$user = new User();
 				$user->username = $username;
@@ -116,16 +115,15 @@ class UserController extends BaseController
 				$user->email = $email;
 				$user->save();
 				$result[ 'status' ] = true;
-				$result[ 'message' ] = 'Usuario creado';
 				$result[ 'item' ] = $user->toArray();
-				$result[ 'message' ] = 'Usuario creado correctamente';
+				$result[ 'message' ] = 'User created successful';
 				return $response->withJson($result, 200);
 			} catch ( \Exception $ex ) {
-				$result[ 'message' ] = 'Error al crear usuario';
+				$result[ 'message' ] = 'Error when creating User';
 				return $response->withJson($result, 500);
 			}
 		} else {
-			$result[ 'message' ] = 'Por favor, envie los campos requeridos.';
+			$result[ 'message' ] = 'Please send correct data';
 			return $response->withJson($result, 500);
 		}
 	}
@@ -149,7 +147,6 @@ class UserController extends BaseController
 		$email = $body[ 'email' ];
 
 		try {
-			$password = Helpers::makeHash($body[ 'password' ]);
 			$userSession = $this->session->get('user');
 			$user = User::findOrFail($userSession->idUser);
 			$user->username = $username;

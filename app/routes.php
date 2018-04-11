@@ -32,7 +32,6 @@ $app->group('/api/v1', function () {
 	$this->group('/publication', function () {
 		$this->post('/create', 'PublicationController:create')->add(new AuthMiddleware());
 		$this->get('/photo/{id}/image.jpg', 'PublicationController:image');
+		$this->get('/data/{id}', 'PublicationController:image');
 	});
-
 });
-

@@ -110,12 +110,29 @@ class Helpers
 
 	public static function get_path_user ( $idUser, $path = '' )
 	{
-		return Path::to('public') . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . $idUser . ( $path == '' ? '' : DIRECTORY_SEPARATOR . $path );
+		return PUBLIC__PATH . DIRECTORY_SEPARATOR . 'image' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . $idUser . ( $path == '' ? '' : DIRECTORY_SEPARATOR . $path );
 	}
 
-	public static function makeHash ( $text )
+	public static function generate_random_string ( $length = 10 )
 	{
-		return hash('sha256', $text);
+		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$charactersLength = strlen($characters);
+		$randomString = '';
+		for ( $i = 0; $i < $length; $i++ ) {
+			$randomString .= $characters[ rand(0, $charactersLength - 1) ];
+		}
+		return $randomString;
+	}
+
+	public static function makeHash ( $text, $random = false )
+	{
+		$hash = hash('sha256', $text);
+
+		if ( $random ) {
+			$hash .= self::generate_random_string(6);
+		}
+
+		return $hash;
 	}
 
 	public static function seeder ()
@@ -138,7 +155,7 @@ class Helpers
 			]);
 
 			/*  Se crea una carpetas para las fotos de usuario */
-			$path = helpers::get_path_user($id_user);
+			$path = Helpers::get_path_user($id_user);
 			mkdir($path, 0700);
 			chmod($path, 0777);
 		}
