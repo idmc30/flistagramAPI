@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Includes\Helpers;
+use App\Models\User;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use  \GuzzleHttp\Psr7\LazyOpenStream;
@@ -40,6 +41,7 @@ class PublicationController extends BaseController
 			$data = base64_decode($base64Photo);
 			$file = Helpers::get_path_user($userLogged->idUser, $new_name_file);
 			$path = Helpers::get_path_user($userLogged->idUser);
+
 			if ( !file_exists($path) ) {
 				mkdir($path, 0700);
 				chmod($path, 0777);
@@ -55,13 +57,14 @@ class PublicationController extends BaseController
 			$photo->pathPhoto = $new_name_file;
 			$photo->idPublication = $publication->idPublication;
 			$photo->save();
+			$publication->photo;
 
 			$result[ 'status' ] = true;
 			$result[ 'message' ] = "Created successful";
 			$result[ 'publication' ] = $publication;
 			return $response->withJson($result, 200);
 		} catch ( \Exception $ex ) {
-			$result[ 'message' ] = "Created successful";
+			$result[ 'message' ] = "Error when creating Publication";
 			$result[ 'ex' ] = $ex->getMessage();
 			return $response->withJson($result, 500);
 		}
@@ -69,20 +72,30 @@ class PublicationController extends BaseController
 
 	public function image ( ServerRequestInterface $request, ResponseInterface $response, $args )
 	{
-		/*		$newResponse = $response->withHeader('Content-type', 'image/jpg');
-				$body = $response->getBody();
-				$body->write('Hello');*/
-		/*		$body = $request->getParsedBody();
+		$result = array(
+			'status' => false,
+			'message' => '',
+		);
+		try {
+			$publication = Publication::findOrFail($args[ 'idPublication' ]);
+			$new_name_file = $publication->photo->pathPhoto;
+			$file = Helpers::get_path_user($publication->idUser, $new_name_file);
+/*			header("Content-Type: image/jpeg");
+			print file_get_contents($file);*/
+			$newStream = new LazyOpenStream($file, 'r');
+			$newResponse_1 = $response->withBody($newStream);
+			$newResponse = $newResponse_1->withHeader('Content-Type', 'image/jpeg');
+			return $newResponse;
+		} catch ( \Exception $ex ) {
+			$result[ 'message' ] = "Error when creating Publication";
+			$result[ 'ex' ] = $ex->getMessage();
+			return $response->withJson($result, 500);
+		}
+	}
 
 
+	public function get_publication ( ServerRequestInterface $request, ResponseInterface $response, $args )
+	{
 
-				$userLogged = $this->session->get('user');
-				$new_name_file = ;
-				$file = Helpers::get_path_user($userLogged->idUser, $new_name_file);
-
-				$dir = dirname(dirname(__DIR__));
-				$imagePath = $dir . "\public\assets\images\baron.jpg";
-				header('Content-type: image/jpeg');
-				echo file_get_contents($imagePath);*/
 	}
 }

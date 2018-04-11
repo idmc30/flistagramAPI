@@ -4,4 +4,4 @@
 cache/**
 log/**
 vendor/
-public/image/users/**
+public/image/users/
