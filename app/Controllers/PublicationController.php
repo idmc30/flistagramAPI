@@ -56,7 +56,10 @@ class PublicationController extends BaseController
 			$photo = new Photo();
 			$photo->pathPhoto = $new_name_file;
 			$photo->idPublication = $publication->idPublication;
+			$photo->publicPath = "pub/$publication->idPublication/image.jpg";
 			$photo->save();
+			$publication->user;
+			$publication->comments;
 			$publication->photo;
 
 			$result[ 'status' ] = true;
@@ -80,8 +83,8 @@ class PublicationController extends BaseController
 			$publication = Publication::findOrFail($args[ 'idPublication' ]);
 			$new_name_file = $publication->photo->pathPhoto;
 			$file = Helpers::get_path_user($publication->idUser, $new_name_file);
-/*			header("Content-Type: image/jpeg");
-			print file_get_contents($file);*/
+			/*			header("Content-Type: image/jpeg");
+						print file_get_contents($file);*/
 			$newStream = new LazyOpenStream($file, 'r');
 			$newResponse_1 = $response->withBody($newStream);
 			$newResponse = $newResponse_1->withHeader('Content-Type', 'image/jpeg');
@@ -96,6 +99,31 @@ class PublicationController extends BaseController
 
 	public function get_publication ( ServerRequestInterface $request, ResponseInterface $response, $args )
 	{
+		/*
+		 * Datos de la publicacion
+		 * Photo
+		 * El usuario que hizo la publicación
+		 * */
 
+		$idPublication = $args[ 'idPublication' ];
+		$result = array(
+			'status' => false,
+			'message' => '',
+		);
+
+		try {
+			$publication = Publication::findOrFail($idPublication);
+			$publication->user;
+			$publication->comments;
+			$publication->photo;
+
+			$result[ 'item' ] = $publication;
+			$result[ 'message' ] = "Found publication";
+			return $response->withJson($result, 200);
+		} catch ( \Exception $ex ) {
+			$result[ 'message' ] = "Publication not found";
+			$result[ 'ex' ] = $ex->getMessage();
+			return $response->withJson($result, 500);
+		}
 	}
 }

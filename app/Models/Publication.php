@@ -17,7 +17,7 @@ class Publication extends Model
 
 	protected $primaryKey = 'idPublication';
 
-	/*	protected $hidden = [ 'password' ];*/
+	protected $hidden = [ 'updated_at' ];
 
 	public function comments ()
 	{
@@ -27,5 +27,10 @@ class Publication extends Model
 	public function photo ()
 	{
 		return $this->hasOne('App\Models\Photo', 'idPublication', 'idPublication');
+	}
+
+	public function user ()
+	{
+		return $this->hasOne('App\Models\User', 'idUser', 'idUser');
 	}
 }

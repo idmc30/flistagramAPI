@@ -15,6 +15,6 @@ class User extends Model
 		"pathPhotoAvatar",
 	);
 	protected $primaryKey = 'idUser';
-	protected $hidden = [ 'password' ];
+	protected $hidden = [ 'password', 'updated_at' ];
 
 }

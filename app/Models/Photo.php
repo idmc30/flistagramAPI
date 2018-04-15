@@ -10,9 +10,10 @@ class Photo extends Model
 		"idPhoto",
 		"pathPhoto",
 		"idPublication",
+		"publicPath",
 		"created_at",
 	);
 	protected $primaryKey = 'idPhoto';
-/*	protected $hidden = [ 'password' ];*/
+	protected $hidden = [ 'updated_at' , 'pathPhoto', 'idPublication'];
 
 }
