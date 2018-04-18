@@ -2,79 +2,68 @@
 
 namespace App\Controllers;
 
-use App\Includes\Helpers;
-use App\Models\Comment;
-use App\Models\Publication;
+use App\Models\Follow;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use  \GuzzleHttp\Psr7\LazyOpenStream;
 
 class FollowController extends BaseController
 {
 
-	/*
-	|---------------------------------------------------------------------------------------------------
-	| Home
-	|---------------------------------------------------------------------------------------------------
-	*/
-	public function save_comment ( ServerRequestInterface $request, ResponseInterface $response, $args )
-	{
-		$result = array(
-			'status' => false,
-			'message' => '',
-		);
+    /*
+    |---------------------------------------------------------------------------------------------------
+    | Home
+    |---------------------------------------------------------------------------------------------------
+    */
+    public function save_follow(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        $result = array(
+            'status' => false,
+            'message' => '',
+        );
 
-		$body = $request->getParsedBody();
-		$text = trim($body[ 'text' ]);
+        try {
+            $id_to_follow = $args['idToFollow'];
+            $userLogged = $this->session->get('user');
+            $user = User::findOrFail($id_to_follow);
 
-		if ( $text == '' ) {
-			$result[ 'message' ] = "The comment is empty";
-			return $response->withJson($result, 500);
-		}
+            $comment = new Follow();
+            $comment->idFollowe = $userLogged->idUser;
+            $comment->idToFollow = $id_to_follow;
+            $comment->save();
 
-		try {
-			$idPublication = $args[ 'idPublication' ];
-			$userLogged = $this->session->get('user');
-			$publication = Publication::findOrFail($idPublication);
-			$comment = new Comment();
-			$comment->idUser = $userLogged->idUser;
-			$comment->text = $text;
-			$comment->idPublication = $idPublication;
-			$comment->save();
-
-			$result[ 'item' ] = $comment;
-			$result[ 'message' ] = "Saved comment";
-			$result[ 'status' ] = true;
-			return $response->withJson($result, 200);
-		} catch ( \Exception $ex ) {
-			$result[ 'message' ] = "The comment was not saved";
-			$result[ 'ex' ] = $ex->getMessage();
-			return $response->withJson($result, 500);
-		}
-	}
+            $result['item'] = $comment;
+            $result['message'] = "Saved follow";
+            $result['status'] = true;
+            return $response->withJson($result, 200);
+        } catch (\Exception $ex) {
+            $result['message'] = "The follow was not saved";
+            $result['ex'] = $ex->getMessage();
+            return $response->withJson($result, 500);
+        }
+    }
 
 
-	public function delete_comment ( ServerRequestInterface $request, ResponseInterface $response, $args )
-	{
-		$result = array(
-			'status' => false,
-			'message' => '',
-		);
-		try {
-			$idComment = $args[ 'idComment' ];
-			$userLogged = $this->session->get('user');
-			$comment = Comment::where([
-				[ 'idComment', '=', $idComment ],
-				[ 'idUser', '=', $userLogged->idUser ]
-			])->firstOrFail();
-			$comment->delete($comment->idComment);
-			$result[ 'status' ] = true;
-			$result[ 'message' ] = "Deleted comment";
-			return $response->withJson($result, 200);
-		} catch ( \Exception $ex ) {
-			$result[ 'message' ] = "Comment was not deleted";
-			$result[ 'ex' ] = $ex->getMessage();
-			return $response->withJson($result, 500);
-		}
-	}
+    public function delete_follow(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        $result = array(
+            'status' => false,
+            'message' => '',
+        );
+        try {
+            $id_to_follow = $args['idToFollow'];
+            $userLogged = $this->session->get('user');
+            $follow = Follow::where([
+                ['idToFollow', '=', $id_to_follow],
+                ['idFollower', '=', $userLogged->idUser]
+            ])->firstOrFail();
+            $follow->delete($follow->idFollow);
+            $result['status'] = true;
+            $result['message'] = "Deleted follow";
+            return $response->withJson($result, 200);
+        } catch (\Exception $ex) {
+            $result['message'] = "Follow was not deleted";
+            $result['ex'] = $ex->getMessage();
+            return $response->withJson($result, 500);
+        }
+    }
 }
