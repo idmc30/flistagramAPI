@@ -89,12 +89,11 @@ class PublicationController extends BaseController
 			$publication = Publication::findOrFail($args[ 'idPublication' ]);
 			$new_name_file = $publication->photo->pathPhoto;
 			$file = Helpers::get_path_user($publication->idUser, $new_name_file);
-			/*			header("Content-Type: image/jpeg");
-						print file_get_contents($file);*/
 			$newStream = new LazyOpenStream($file, 'r');
-			$newResponse_1 = $response->withBody($newStream);
-			$newResponse = $newResponse_1->withHeader('Content-Type', 'image/jpeg');
-			return $newResponse;
+			$repoonse = $response->withBody($newStream);
+			$repoonse = $repoonse->withHeader('Content-Type', 'image/jpg');
+			$repoonse = $repoonse->withHeader('Content-Disposition', 'inline; filename="'.$new_name_file.'"');
+			return $repoonse;
 		} catch ( \Exception $ex ) {
 			$result[ 'message' ] = "Error when creating Publication";
 			$result[ 'ex' ] = $ex->getMessage();

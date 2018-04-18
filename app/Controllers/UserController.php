@@ -209,4 +209,29 @@ class UserController extends BaseController
 			return $response->withJson($result, 500);
 		}
 	}
+
+	/*
+		|---------------------------------------------------------------------------------------------------
+		| User Upload profile image
+		|---------------------------------------------------------------------------------------------------
+		*/
+
+	public function create_photo_profile ( ServerRequestInterface $request, ResponseInterface $response, $args )
+	{
+		$result = array(
+			'status' => false,
+			'message' => '',
+		);
+		try {
+			$userSession = $this->session->get('user');
+			$user = User::findOrFail($userSession->idUser);
+			$result[ 'status' ] = true;
+			$result[ 'item' ] = $user->toArray();
+			$result[ 'message' ] = 'User finding successful';
+			return $response->withJson($result, 200);
+		} catch ( \Exception $ex ) {
+			$result[ 'message' ] = 'User not found';
+			return $response->withJson($result, 404);
+		}
+	}
 }
