@@ -33,4 +33,10 @@ class Publication extends Model
 	{
 		return $this->hasOne('App\Models\User', 'idUser', 'idUser');
 	}
+
+	public function likes ()
+	{
+		return $this->hasMany('App\Models\Like', 'idPublication', 'idPublication');
+	}
+
 }

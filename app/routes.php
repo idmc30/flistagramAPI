@@ -10,8 +10,6 @@ $app->get('/image', 'PageController:home');
 //Route groups
 use App\Middlewares\AuthMiddleware;
 
-
-
 $app->group('/api/v1', function () {
 	/* Group Account*/
 	$this->group('/account', function () {
@@ -33,6 +31,15 @@ $app->group('/api/v1', function () {
 		$this->post('/create', 'PublicationController:create')->add(new AuthMiddleware());
 		$this->get('/data/{idPublication}', 'PublicationController:get_publication');
 	});
+
+	$this->group('/comment', function () {
+		$this->post('/pub/{idPublication}', 'CommentController:save_comment');
+		$this->post('/delete/{idComment}', 'CommentController:delete_comment');
+	})->add(new AuthMiddleware());
+
+	$this->group('/like', function () {
+		$this->post('/pub/{idPublication}/{state}', 'LikeController:set_like');
+	})->add(new AuthMiddleware());
 
 	$this->group('/static', function () {
 		$this->get('/pub/{idPublication}/image.jpg', 'PublicationController:image');

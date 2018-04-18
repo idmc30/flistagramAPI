@@ -56,11 +56,17 @@ class PublicationController extends BaseController
 			$photo = new Photo();
 			$photo->pathPhoto = $new_name_file;
 			$photo->idPublication = $publication->idPublication;
-			$photo->publicPath = "pub/$publication->idPublication/image.jpg";
+			$photo->publicPath = "static/pub/$publication->idPublication/image.jpg";
 			$photo->save();
+			/* Get data of publication*/
 			$publication->user;
-			$publication->comments;
 			$publication->photo;
+			foreach ( $publication->likes as $comment ) {
+				$comment->user;
+			}
+			foreach ( $publication->comments as $comment ) {
+				$comment->user;
+			}
 
 			$result[ 'status' ] = true;
 			$result[ 'message' ] = "Created successful";
@@ -110,14 +116,19 @@ class PublicationController extends BaseController
 			'status' => false,
 			'message' => '',
 		);
-
 		try {
 			$publication = Publication::findOrFail($idPublication);
 			$publication->user;
-			$publication->comments;
 			$publication->photo;
+			foreach ( $publication->likes as $comment ) {
+				$comment->user;
+			}
+			foreach ( $publication->comments as $comment ) {
+				$comment->user;
+			}
 
 			$result[ 'item' ] = $publication;
+			$result[ 'status' ] = true;
 			$result[ 'message' ] = "Found publication";
 			return $response->withJson($result, 200);
 		} catch ( \Exception $ex ) {

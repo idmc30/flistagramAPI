@@ -14,6 +14,6 @@ class Photo extends Model
 		"created_at",
 	);
 	protected $primaryKey = 'idPhoto';
-	protected $hidden = [ 'updated_at' , 'pathPhoto', 'idPublication'];
+	protected $hidden = [ 'updated_at', 'pathPhoto', 'idPublication' ];
 
 }
