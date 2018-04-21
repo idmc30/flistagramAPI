@@ -20,12 +20,15 @@ $app->group('/api/v1', function () {
 	$this->group('/user', function () {
 		$this->get('/all', 'UserController:all_users');
 		/* Group*/
-		$this->get('/data', 'UserController:user');
-        $this->get('/profile', 'UserController:user_profile');
+		$this->get('/profile', 'UserController:user_profile');
 		$this->get('/data/{id}', 'UserController:user_id');
 
-		$this->post('/data/update', 'UserController:update');
-		$this->post('/data/update/password', 'UserController:update_password');
+		$this->group('/data', function () {
+			$this->get('/', 'UserController:user');
+			$this->post('/data/update', 'UserController:update');
+			$this->post('/data/update/password', 'UserController:update_password');
+		});
+
 	})->add(new AuthMiddleware());
 
 	$this->group('/publication', function () {
@@ -33,13 +36,13 @@ $app->group('/api/v1', function () {
 		$this->get('/data/{idPublication}', 'PublicationController:get_publication');
 	});
 
-    $this->group('/follow', function () {
-        $this->post('/set/{idFollowed}', 'FollowController:save_follow');
-        $this->get('/undo/{idFollowed}', 'FollowController:delete_follow');
-    })->add(new AuthMiddleware());
+	$this->group('/follow', function () {
+		$this->post('/set/{idFollowed}', 'FollowController:save_follow');
+		$this->get('/undo/{idFollowed}', 'FollowController:delete_follow');
+	})->add(new AuthMiddleware());
 
 
-    $this->group('/comment', function () {
+	$this->group('/comment', function () {
 		$this->post('/pub/{idPublication}', 'CommentController:save_comment');
 		$this->post('/delete/{idComment}', 'CommentController:delete_comment');
 	})->add(new AuthMiddleware());

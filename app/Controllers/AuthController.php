@@ -34,7 +34,7 @@ class AuthController extends BaseController
 				$jwt_data[ 'data' ] = [
 					'username' => $user->username,
 					'email' => $user->email,
-					'idUser' => $user->idUser
+					'idUser' => $user->idUser,
 				];
 				$jwt = JWT::encode($jwt_data, $this->container->get('settings')[ 'app' ][ 'key_jtw' ]);
 				$result[ 'status' ] = true;

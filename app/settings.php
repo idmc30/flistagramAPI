@@ -13,7 +13,7 @@ return array(
 			'iat' => time(),         // Issued at: time when the token was generated
 			'jti' => 'flisolAbril2018',          // Json Token Id: an unique identifier for the token
 			'iss' => 'http://localhost/flistagramApi/',       // Issuer
-			'nbf' => time() + 5,        // Not before
+			'nbf' => time() + 0,        // Not before
 			'exp' => time() + ( 43800 * 60 ),           // Expire un mes
 			'data' => [                  // Data related to the signer user
 			]
