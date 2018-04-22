@@ -16,7 +16,7 @@ class User extends Model
     );
 
     protected $primaryKey = 'idUser';
-    protected $hidden = ['password', 'updated_at','created_at'];
+    protected $hidden = ['password', 'updated_at','created_at','email'];
 
 
     public function publications()

@@ -29,6 +29,7 @@ $app->group('/api/v1', function () {
 			$this->post('/data/update/password', 'UserController:update_password');
 		})->add(new AuthMiddleware());
 
+        $this->get('/find', 'UserController:find_users');
 	});
 
 	$this->group('/publication', function () {

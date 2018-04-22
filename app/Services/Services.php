@@ -4,8 +4,8 @@
 | Services
 |---------------------------------------------------------------------------------------------------
 */
-$container[ 'functions' ] = function ( $container ) {
-	return new Slimer\Functions\SlimerFunctions();
+$container['functions'] = function ($container) {
+    return new Slimer\Functions\SlimerFunctions();
 };
 
 //How to use
@@ -19,19 +19,35 @@ $container[ 'functions' ] = function ( $container ) {
 | DB using Eloquent
 |---------------------------------------------------------------------------------------------------
 */
-$container[ 'db' ] = function ( $container ) {
-	$capsule = $container->get('eloquent');
-	if ( !$capsule ) {
-		return null;
-	}
-	$settings = $container->get('settings');
-	$connections = $settings[ 'app' ][ 'connections' ];
+$container['db'] = function ($container) {
+    $capsule = $container->get('eloquent');
+    if (!$capsule) {
+        return null;
+    }
+    $settings = $container->get('settings');
+    $connections = $settings['app']['connections'];
 //
-	//Add connections
-	$capsule->addConnection($connections[ 'mysql' ]);
-	//$capsule->addConnection( $connections['pgsql'] );//PostgreSQL
-	//$capsule->addConnection( $connections['sqlsrv'] );//SQL Server
-	//$capsule->addConnection( $connections['sqlite'] );//SQLite
+    //Add connections
+    $capsule->addConnection($connections['mysql']);
+    //$capsule->addConnection( $connections['pgsql'] );//PostgreSQL
+    //$capsule->addConnection( $connections['sqlsrv'] );//SQL Server
+    //$capsule->addConnection( $connections['sqlite'] );//SQLite
 //
-	return $capsule;
+    return $capsule;
+};
+
+
+//Override the default Not Found Handler
+$container['notFoundHandler'] = function ($container) {
+    return function ($request, $response) use ($container) {
+        return $container['response']
+            ->withStatus(404)
+            ->withHeader('Content-Type', 'application/json')
+            ->write(json_encode(
+                [
+                    'status' => false,
+                    'message' => 'Url not found'
+                ]
+            ));
+    };
 };

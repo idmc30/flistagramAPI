@@ -22,24 +22,28 @@ class FollowController extends BaseController
             'message' => '',
         );
 
-        try {
-            $id_to_follow = $args['idToFollow'];
-            $user_logged = $this->session->get('user');
-            $user = User::findOrFail($id_to_follow);
+        $id_to_follow = $args['idToFollow'];
 
-            $comment = new Follow();
-            $comment->idFollower = $user_logged->idUser;
-            $comment->idToFollow = $id_to_follow;
-            $comment->save();
 
-            $result['item'] = $comment;
-            $result['message'] = "Saved follow";
-            $result['status'] = true;
-            return $response->withJson($result, 200);
-        } catch (\Exception $ex) {
-            $result['message'] = "The follow was not saved";
-            $result['ex'] = $ex->getMessage();
-            return $response->withJson($result, 500);
+        if ($id_to_follow != '') {
+            try {
+                $user_logged = $this->session->get('user');
+                $user = User::findOrFail($id_to_follow);
+                $follow = new Follow();
+                $follow->idFollower = $user_logged->idUser;
+                $follow->idToFollow = $id_to_follow;
+                $follow->save();
+                $result['message'] = "Saved follow";
+                $result['status'] = true;
+                return $response->withJson($result, 200);
+            } catch (\Exception $ex) {
+                $result['message'] = "The follow was not saved";
+                $result['ex'] = $ex->getMessage();
+                return $response->withJson($result, 500);
+            }
+        } else {
+            $result['message'] = 'Please send id to follow field.';
+            return $response->withJson($result, 404);
         }
     }
 
@@ -50,21 +54,27 @@ class FollowController extends BaseController
             'status' => false,
             'message' => '',
         );
-        try {
-            $id_to_follow = $args['idToFollow'];
-            $userLogged = $this->session->get('user');
-            $follow = Follow::where([
-                ['idToFollow', '=', $id_to_follow],
-                ['idFollower', '=', $userLogged->idUser]
-            ])->firstOrFail();
-            $follow->delete($follow->idConnection);
-            $result['status'] = true;
-            $result['message'] = "Deleted follow";
-            return $response->withJson($result, 200);
-        } catch (\Exception $ex) {
-            $result['message'] = "Follow was not deleted";
-            $result['ex'] = $ex->getMessage();
-            return $response->withJson($result, 500);
+        $id_to_follow = $args['idToFollow'];
+        if ($id_to_follow != '') {
+            try {
+                $id_to_follow = $args['idToFollow'];
+                $userLogged = $this->session->get('user');
+                $follow = Follow::where([
+                    ['idToFollow', '=', $id_to_follow],
+                    ['idFollower', '=', $userLogged->idUser]
+                ])->firstOrFail();
+                $follow->delete($follow->idConnection);
+                $result['status'] = true;
+                $result['message'] = "Deleted follow";
+                return $response->withJson($result, 200);
+            } catch (\Exception $ex) {
+                $result['message'] = "Follow was not deleted";
+                $result['ex'] = $ex->getMessage();
+                return $response->withJson($result, 500);
+            }
+        } else {
+            $result['message'] = 'Please send id to follow field.';
+            return $response->withJson($result, 404);
         }
     }
 }

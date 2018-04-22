@@ -261,14 +261,12 @@ class UserController extends BaseController
                     $publication->photo;
                     $publication->likes;
                 }
-
                 foreach ($user->followers as $user_follow){
                     $user_follow->follower;
                 }
                 foreach ($user->followed as $user_followed){
                     $user_followed->followed;
                 }
-
                 $result['status'] = true;
                 $result['item'] = $user->toArray();
                 $result['message'] = 'User finding successful';
