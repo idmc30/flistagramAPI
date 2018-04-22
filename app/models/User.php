@@ -14,13 +14,24 @@ class User extends Model
         "email",
         "pathPhotoAvatar",
     );
+
     protected $primaryKey = 'idUser';
-    protected $hidden = ['password', 'updated_at'];
+    protected $hidden = ['password', 'updated_at','created_at'];
 
 
     public function publications()
     {
-        return $this->hasMany('App\Models\Publication', 'idPublication', 'idPublication');
+        return $this->hasMany('App\Models\Publication', 'idUser', 'idUser');
+    }
+
+    public function followers()
+    {
+        return $this->hasMany('App\Models\Follow', 'idToFollow', 'idUser');
+    }
+
+    public function followed()
+    {
+        return $this->hasMany('App\Models\Follow', 'idFollower', 'idUser');
     }
 
 }

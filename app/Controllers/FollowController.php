@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\Follow;
+use App\Models\User;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -23,11 +24,11 @@ class FollowController extends BaseController
 
         try {
             $id_to_follow = $args['idToFollow'];
-            $userLogged = $this->session->get('user');
+            $user_logged = $this->session->get('user');
             $user = User::findOrFail($id_to_follow);
 
             $comment = new Follow();
-            $comment->idFollowe = $userLogged->idUser;
+            $comment->idFollower = $user_logged->idUser;
             $comment->idToFollow = $id_to_follow;
             $comment->save();
 
@@ -56,7 +57,7 @@ class FollowController extends BaseController
                 ['idToFollow', '=', $id_to_follow],
                 ['idFollower', '=', $userLogged->idUser]
             ])->firstOrFail();
-            $follow->delete($follow->idFollow);
+            $follow->delete($follow->idConnection);
             $result['status'] = true;
             $result['message'] = "Deleted follow";
             return $response->withJson($result, 200);

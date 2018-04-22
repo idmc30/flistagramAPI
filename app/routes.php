@@ -20,16 +20,16 @@ $app->group('/api/v1', function () {
 	$this->group('/user', function () {
 		$this->get('/all', 'UserController:all_users');
 		/* Group*/
-		$this->get('/profile', 'UserController:user_profile');
+		$this->get('/profile/{username}', 'UserController:user_profile');
 		$this->get('/data/{id}', 'UserController:user_id');
 
 		$this->group('/data', function () {
 			$this->get('/', 'UserController:user');
 			$this->post('/data/update', 'UserController:update');
 			$this->post('/data/update/password', 'UserController:update_password');
-		});
+		})->add(new AuthMiddleware());
 
-	})->add(new AuthMiddleware());
+	});
 
 	$this->group('/publication', function () {
 		$this->post('/create', 'PublicationController:create')->add(new AuthMiddleware());
@@ -37,10 +37,9 @@ $app->group('/api/v1', function () {
 	});
 
 	$this->group('/follow', function () {
-		$this->post('/set/{idFollowed}', 'FollowController:save_follow');
-		$this->get('/undo/{idFollowed}', 'FollowController:delete_follow');
+		$this->post('/add/{idToFollow}', 'FollowController:save_follow');
+		$this->post('/remove/{idToFollow}', 'FollowController:delete_follow');
 	})->add(new AuthMiddleware());
-
 
 	$this->group('/comment', function () {
 		$this->post('/pub/{idPublication}', 'CommentController:save_comment');

@@ -5,25 +5,25 @@ namespace App\Models;
 class Follow extends Model
 {
 
-	protected $table = 'connection';
-	protected $fillable = array(
-		"idConnection",
-		"idFollower",
-		"idToFollow",
-		"created_at",
-	);
+    protected $table = 'connection';
+    protected $fillable = array(
+        "idConnection",
+        "idFollower",
+        "idToFollow",
+        "created_at",
+    );
 
-	protected $primaryKey = 'idFollow';
+    protected $primaryKey = 'idConnection';
 
-	/*	protected $hidden = [ 'idPublication' ];*/
+    protected $hidden = ['created_at', "idFollower", "idToFollow", 'updated_at'];
 
-	public function userFollower ()
-	{
-		return $this->hasOne('App\Models\User', 'idUser', 'idFollower');
-	}
+    public function follower()
+    {
+        return $this->hasOne('App\Models\User', 'idUser', 'idFollower');
+    }
 
-	public function userToFollow ()
-	{
-		return $this->hasOne('App\Models\User', 'idUser', 'idToFollow');
-	}
+    public function followed()
+    {
+        return $this->hasOne('App\Models\User', 'idUser', 'idToFollow');
+    }
 }
