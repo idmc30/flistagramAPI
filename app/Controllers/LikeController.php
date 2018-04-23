@@ -23,21 +23,21 @@ class LikeController extends BaseController
 		);
 
 		try {
-			$idPublication = $args[ 'idPublication' ];
+			$id_publication = $args[ 'id_publication' ];
 			$state = ( $args[ 'state' ] == 1 ) ? 1 : 0;
 			$userLogged = $this->session->get('user');
 
-			$publication = Publication::findOrFail($idPublication);
+			$publication = Publication::findOrFail($id_publication);
 
 			$comment = Like::where([
-				[ "idUser", '=', $userLogged->idUser ],
-				[ "idPublication", '=', $idPublication ]
+				[ "id_user", '=', $userLogged->id_user ],
+				[ "id_publication", '=', $id_publication ]
 			])->first();
 
 			if ( !$comment ) {
 				$comment = new Like();
-				$comment->idUser = $userLogged->idUser;
-				$comment->idPublication = $idPublication;
+				$comment->id_user = $userLogged->id_user;
+				$comment->id_publication = $id_publication;
 			}
 
 			$comment->state = $state;

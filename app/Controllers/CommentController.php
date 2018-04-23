@@ -33,13 +33,13 @@ class CommentController extends BaseController
 		}
 
 		try {
-			$idPublication = $args[ 'idPublication' ];
+			$id_publication = $args[ 'id_publication' ];
 			$userLogged = $this->session->get('user');
-			$publication = Publication::findOrFail($idPublication);
+			$publication = Publication::findOrFail($id_publication);
 			$comment = new Comment();
-			$comment->idUser = $userLogged->idUser;
+			$comment->id_user = $userLogged->id_user;
 			$comment->text = $text;
-			$comment->idPublication = $idPublication;
+			$comment->id_publication = $id_publication;
 			$comment->save();
 
 			$result[ 'item' ] = $comment;
@@ -61,13 +61,13 @@ class CommentController extends BaseController
 			'message' => '',
 		);
 		try {
-			$idComment = $args[ 'idComment' ];
+			$id_comment = $args[ 'id_comment' ];
 			$userLogged = $this->session->get('user');
 			$comment = Comment::where([
-				[ 'idComment', '=', $idComment ],
-				[ 'idUser', '=', $userLogged->idUser ]
+				[ 'id_comment', '=', $id_comment ],
+				[ 'id_user', '=', $userLogged->id_user ]
 			])->firstOrFail();
-			$comment->delete($comment->idComment);
+			$comment->delete($comment->id_comment);
 			$result[ 'status' ] = true;
 			$result[ 'message' ] = "Deleted comment";
 			return $response->withJson($result, 200);

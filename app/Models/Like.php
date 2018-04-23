@@ -7,22 +7,22 @@ class Like extends Model
 
     protected $table = 'like';
     protected $fillable = array(
-        "idLike",
-        "idUser",
-        "idPublication",
+        "id_like",
+        "id_user",
+        "id_publication",
         "created_at",
         "state"
     );
-    protected $primaryKey = 'idLike';
-    protected $hidden = ['idPublication', 'idLike', 'created_at','updated_at'];
+    protected $primaryKey = 'id_like';
+    protected $hidden = ['id_publication', 'id_like', 'created_at', 'updated_at'];
 
     public function user()
     {
-        return $this->hasOne('App\Models\User', 'idUser', 'idUser');
+        return $this->hasOne('App\Models\User', 'id_user', 'id_user');
     }
 
     public function publication()
     {
-        return $this->hasOne('App\Models\User', 'idPublication', 'idPublication');
+        return $this->hasOne('App\Models\User', 'id_publication', 'id_publication');
     }
 }

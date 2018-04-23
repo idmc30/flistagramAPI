@@ -5,19 +5,20 @@ namespace App\Models;
 class Comment extends Model
 {
 
-	protected $table = 'comment';
-	protected $fillable = array(
-		"idComment",
-		"text",
-		"idUser",
-		"idPublication",
-		"created_at",
-	);
-	protected $primaryKey = 'idComment';
-/*	protected $hidden = [ 'idPublication' ];*/
+    protected $table = 'comment';
+    protected $fillable = array(
+        "id_comment",
+        "text",
+        "id_user",
+        "id_publication",
+        "created_at",
+    );
+    protected $primaryKey = 'id_comment';
 
-	public function user ()
-	{
-		return $this->hasOne('App\Models\User', 'idUser', 'idUser');
-	}
+    /*	protected $hidden = [ 'idPublication' ];*/
+
+    public function user()
+    {
+        return $this->hasOne('App\Models\User', 'id_user', 'id_user');
+    }
 }

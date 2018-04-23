@@ -22,7 +22,7 @@ class FollowController extends BaseController
             'message' => '',
         );
 
-        $id_to_follow = $args['idToFollow'];
+        $id_to_follow = $args['id_to_follow'];
 
 
         if ($id_to_follow != '') {
@@ -30,8 +30,8 @@ class FollowController extends BaseController
                 $user_logged = $this->session->get('user');
                 $user = User::findOrFail($id_to_follow);
                 $follow = new Follow();
-                $follow->idFollower = $user_logged->idUser;
-                $follow->idToFollow = $id_to_follow;
+                $follow->id_follower = $user_logged->id_user;
+                $follow->id_to_follow = $id_to_follow;
                 $follow->save();
                 $result['message'] = "Saved follow";
                 $result['status'] = true;
@@ -54,16 +54,16 @@ class FollowController extends BaseController
             'status' => false,
             'message' => '',
         );
-        $id_to_follow = $args['idToFollow'];
+        $id_to_follow = $args['id_to_follow'];
         if ($id_to_follow != '') {
             try {
-                $id_to_follow = $args['idToFollow'];
+                $id_to_follow = $args['id_to_follow'];
                 $userLogged = $this->session->get('user');
                 $follow = Follow::where([
-                    ['idToFollow', '=', $id_to_follow],
-                    ['idFollower', '=', $userLogged->idUser]
+                    ['id_to_follow', '=', $id_to_follow],
+                    ['id_follower', '=', $userLogged->id_user]
                 ])->firstOrFail();
-                $follow->delete($follow->idConnection);
+                $follow->delete($follow->id_connection);
                 $result['status'] = true;
                 $result['message'] = "Deleted follow";
                 return $response->withJson($result, 200);

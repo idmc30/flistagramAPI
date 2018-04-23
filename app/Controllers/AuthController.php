@@ -28,13 +28,13 @@ class AuthController extends BaseController
 		if ( trim($username) != '' && trim($password) != '' ) {
 			try {
 				$password = hash('sha256', $body[ 'password' ]);
-				$user = User::select('idUser', 'username', 'email')->where('username', '=', $username)
+				$user = User::select('id_user', 'username', 'email')->where('username', '=', $username)
 					->where('password', $password)->firstOrFail();
 				$jwt_data = $this->container->get('settings')[ 'app' ][ 'data_jwt' ];
 				$jwt_data[ 'data' ] = [
 					'username' => $user->username,
 					'email' => $user->email,
-					'idUser' => $user->idUser,
+					'id_user' => $user->id_user,
 				];
 				$jwt = JWT::encode($jwt_data, $this->container->get('settings')[ 'app' ][ 'key_jtw' ]);
 				$result[ 'status' ] = true;

@@ -6,6 +6,7 @@ use App\Includes\Helpers;
 use App\Models\User;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use  \GuzzleHttp\Psr7\LazyOpenStream;
 
 class UserController extends BaseController
 {
@@ -73,7 +74,7 @@ class UserController extends BaseController
         );
         try {
             $userSession = $this->session->get('user');
-            $user = User::findOrFail($userSession->idUser);
+            $user = User::findOrFail($userSession->id_user);
             $result['status'] = true;
             $result['item'] = $user->toArray();
             $result['message'] = 'User finding successful';
@@ -153,15 +154,21 @@ class UserController extends BaseController
 
         try {
             $userSession = $this->session->get('user');
-            $user = User::findOrFail($userSession->idUser);
-            $user->username = $username;
-            $user->name = $name;
-            $user->email = $email;
-            $user->save();
-            $result['status'] = true;
-            $result['item'] = $user->toArray();
-            $result['message'] = 'User updated success';
-            return $response->withJson($result, 200);
+            $userExist = User::where('username', '=', $username)->first();
+            if (!$userExist) {
+                $user = User::findOrFail($userSession->id_user);
+                $user->username = $username;
+                $user->name = $name;
+                $user->email = $email;
+                $user->save();
+                $result['status'] = true;
+                $result['item'] = $user->toArray();
+                $result['message'] = 'User updated success';
+                return $response->withJson($result, 200);
+            } else {
+                $result['message'] = 'Field username is not unique';
+                return $response->withJson($result, 500);
+            }
         } catch (\Exception $ex) {
             $result['message'] = 'Error updating User';
             return $response->withJson($result, 500);
@@ -169,10 +176,10 @@ class UserController extends BaseController
     }
 
     /*
-            |---------------------------------------------------------------------------------------------------
-            | User Update Password
-            |---------------------------------------------------------------------------------------------------
-            */
+    |---------------------------------------------------------------------------------------------------
+    | User Update Password
+    |---------------------------------------------------------------------------------------------------
+    */
     public function update_password(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
         $result = array(
@@ -189,7 +196,7 @@ class UserController extends BaseController
                 try {
                     $password = Helpers::makeHash($last_password);
                     $userSession = $this->session->get('user');
-                    $user = User::where('idUser', '=', $userSession->idUser)->where('password', '=', $password)->first();
+                    $user = User::where('id_user', '=', $userSession->id_user)->where('password', '=', $password)->first();
                     if ($user) {
                         $user->password = User::makePassword($new_password_1);
                         $user->save();
@@ -216,35 +223,11 @@ class UserController extends BaseController
     }
 
     /*
-            |---------------------------------------------------------------------------------------------------
-            | User Upload profile image
-            |---------------------------------------------------------------------------------------------------
-            */
+    |---------------------------------------------------------------------------------------------------
+    | User Profile by Username
+    |---------------------------------------------------------------------------------------------------
+    */
 
-    public function create_photo_profile(ServerRequestInterface $request, ResponseInterface $response, $args)
-    {
-        $result = array(
-            'status' => false,
-            'message' => '',
-        );
-        try {
-            $userSession = $this->session->get('user');
-            $user = User::findOrFail($userSession->idUser);
-            $result['status'] = true;
-            $result['item'] = $user->toArray();
-            $result['message'] = 'User finding successful';
-            return $response->withJson($result, 200);
-        } catch (\Exception $ex) {
-            $result['message'] = 'User not found';
-            return $response->withJson($result, 404);
-        }
-    }
-
-    /*
-|---------------------------------------------------------------------------------------------------
-| User
-|---------------------------------------------------------------------------------------------------
-*/
     public function user_profile(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
         $result = array(
@@ -257,14 +240,14 @@ class UserController extends BaseController
         if ($username != '') {
             try {
                 $user = User::where('username', '=', $username)->firstOrFail();
-                foreach ( $user->publications as $publication ){
+                foreach ($user->publications as $publication) {
                     $publication->photo;
                     $publication->likes;
                 }
-                foreach ($user->followers as $user_follow){
+                foreach ($user->followers as $user_follow) {
                     $user_follow->follower;
                 }
-                foreach ($user->followed as $user_followed){
+                foreach ($user->followed as $user_followed) {
                     $user_followed->followed;
                 }
                 $result['status'] = true;
@@ -281,4 +264,146 @@ class UserController extends BaseController
             return $response->withJson($result, 404);
         }
     }
+
+    /*
+     * My profile
+     * */
+
+    public function my_profile(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        $result = array(
+            'status' => false,
+            'message' => '',
+        );
+        $userSession = $this->session->get('user');
+        try {
+            $user = User::findOrFail($userSession->id_user);
+            foreach ($user->publications as $publication) {
+                $publication->photo;
+                $publication->likes;
+            }
+            foreach ($user->followers as $user_follow) {
+                $user_follow->follower;
+            }
+            foreach ($user->followed as $user_followed) {
+                $user_followed->followed;
+            }
+            $result['status'] = true;
+            $result['item'] = $user->toArray();
+            $result['message'] = 'User finding successful';
+            return $response->withJson($result, 200);
+        } catch (\Exception $ex) {
+            $result['message'] = 'User not found';
+            $result['ex'] = $ex->getMessage();
+            return $response->withJson($result, 404);
+        }
+    }
+
+
+    /*
+     |---------------------------------------------------------------------------------------------------
+     | Find users
+     |---------------------------------------------------------------------------------------------------
+     */
+    public function find_users(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        $result = array(
+            'status' => false,
+            'message' => '',
+        );
+
+        $body = $request->getParsedBody();
+        $text = trim($body['text']);
+
+        if ($text != '') {
+            try {
+                $userSession = $this->session->get('user');
+                $users = User::where('name', 'LIKE', "%$text%")
+                    ->orWhere('username', 'LIKE', "%$text%")->get();
+                $result['status'] = true;
+                $result['item'] = $users->toArray();
+                $result['count'] = count($users->toArray());
+                $result['message'] = 'Found users';
+                return $response->withJson($result, 200);
+            } catch (\Exception $ex) {
+                $result['message'] = 'Users not found';
+                return $response->withJson($result, 500);
+            }
+        } else {
+            $result['message'] = 'Please send text field.';
+            return $response->withJson($result, 404);
+        }
+    }
+
+    /*
+    |---------------------------------------------------------------------------------------------------
+    | Upload photo profile
+    |---------------------------------------------------------------------------------------------------
+    */
+    public function upload_photo_profile(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        $result = array(
+            'status' => false,
+            'message' => '',
+        );
+
+        $body = $request->getParsedBody();
+        $userLogged = $this->session->get('user');
+        $base64Photo = trim($body['dataBase64Photo']);
+
+        try {
+            $new_name_file = Helpers::makeHash($userLogged->id_user, true) . '.jpg';
+
+            $base64Photo = str_replace('data:image/jpeg;base64,', '', $base64Photo);
+            $base64Photo = str_replace(' ', '+', $base64Photo);
+            $data = base64_decode($base64Photo);
+            $file = Helpers::get_path_user($userLogged->id_user, $new_name_file);
+            $path = Helpers::get_path_user($userLogged->id_user);
+
+            if (!file_exists($path)) {
+                mkdir($path, 0700);
+                chmod($path, 0777);
+            }
+            $success = file_put_contents($file, $data);
+
+            $user = User::findOrFail($userLogged->id_user);
+            $user->name_file_photo = $new_name_file;
+            $user->path_photo = "/api/v1/storage/u/$userLogged->username/profile.jpg";
+            $user->save();
+
+            $result['status'] = true;
+            $result['message'] = "Photo profile created successful";
+            $result['publication'] = $user;
+            return $response->withJson($result, 200);
+        } catch (\Exception $ex) {
+            $result['message'] = "Error when creating Photo profile";
+            $result['ex'] = $ex->getMessage();
+            return $response->withJson($result, 500);
+        }
+    }
+
+    public function get_profile_image(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        $result = array(
+            'status' => false,
+            'message' => '',
+        );
+
+        try {
+            $user = User::where('username', '=', $args['username'])->firstOrFail();
+            $new_name_file = $user->name_file_photo;
+            $file = Helpers::get_path_user($user->id_user, $new_name_file);
+
+            $newStream = new LazyOpenStream($file, 'r');
+            $reponse = $response->withBody($newStream);
+            $reponse = $reponse->withHeader('Content-Type', 'image/jpg');
+            $reponse = $reponse->withHeader('Content-Disposition', 'inline; filename="' . $new_name_file . '"');
+            return $reponse;
+        } catch (\Exception $ex) {
+            $result['message'] = "Image not found";
+            $result['ex'] = $ex->getMessage();
+            return $response->withJson($result, 500);
+        }
+    }
+
 }

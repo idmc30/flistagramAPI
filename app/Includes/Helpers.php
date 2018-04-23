@@ -12,12 +12,12 @@ class Helpers
 		return false;
 	}
 
-	public static function get_url_photo_profile ( $idUser, $path_photo = '' )
+	public static function get_url_photo_profile ( $id_user, $path_photo = '' )
 	{
 		if ( empty($path_photo) ) {
-			$path = URL::to('public/img/profile-default.jpg');
+			$path = URL::to('storage/images/profile-default.jpg');
 		} else {
-			$path = URL::to('public/img/users/' . $idUser . '/' . $path_photo);
+			$path = URL::to('storage/images/users/' . $id_user . '/' . $path_photo);
 		}
 		return $path;
 	}
@@ -108,9 +108,9 @@ class Helpers
 		imagedestroy($image_p);
 	}
 
-	public static function get_path_user ( $idUser, $path = '' )
+	public static function get_path_user ( $id_user, $path = '' )
 	{
-		return PUBLIC__PATH . DIRECTORY_SEPARATOR . 'image' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . $idUser . ( $path == '' ? '' : DIRECTORY_SEPARATOR . $path );
+		return STORAGE__PATH . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . 'users' . DIRECTORY_SEPARATOR . $id_user . ( $path == '' ? '' : DIRECTORY_SEPARATOR . $path );
 	}
 
 	public static function generate_random_string ( $length = 10 )
@@ -151,7 +151,7 @@ class Helpers
 				'phone' => $user->phoneNumber
 			]);
 			Profile::create([
-				'idUser' => $id_user,
+				'id_user' => $id_user,
 			]);
 
 			/*  Se crea una carpetas para las fotos de usuario */
