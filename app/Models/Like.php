@@ -11,7 +11,6 @@ class Like extends Model
         "id_user",
         "id_publication",
         "created_at",
-        "state"
     );
     protected $primaryKey = 'id_like';
     protected $hidden = ['id_publication', 'id_like', 'created_at', 'updated_at'];

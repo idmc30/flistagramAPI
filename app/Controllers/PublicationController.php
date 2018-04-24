@@ -9,6 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 use  \GuzzleHttp\Psr7\LazyOpenStream;
 use App\Models\Publication;
 use App\Models\Photo;
+use App\Models\Like;
 
 
 class PublicationController extends BaseController
@@ -64,6 +65,17 @@ class PublicationController extends BaseController
             foreach ($publication->comments as $comment) {
                 $comment->user;
             }
+            $myLike = Like::where([
+                ['id_publication', '=', $publication->id_publication],
+                ['id_user', '=', $userLogged->id_user],
+            ])->first();
+
+            $result['i_like_it'] = false;
+
+            if ($myLike) {
+                $result['i_like_it'] = $myLike->state == 1;
+            }
+
             $result['status'] = true;
             $result['message'] = "Created successful";
             $result['publication'] = $publication;
@@ -121,16 +133,33 @@ class PublicationController extends BaseController
             'status' => false,
             'message' => '',
         );
+
+        $user_logged = $this->session->get('user');
+
+
         try {
             $publication = Publication::findOrFail($id_publication);
             $publication->user;
             $publication->photo;
-            foreach ($publication->likes as $comment) {
-                $comment->user;
+            foreach ($publication->likes as $like) {
+                $like->user;
             }
             foreach ($publication->comments as $comment) {
                 $comment->user;
             }
+
+            $myLike = Like::where([
+                ['id_publication', '=', $publication->id_publication],
+                ['id_user', '=', $user_logged->id_user],
+            ])->first();
+
+            $result['i_like_it'] = false;
+
+
+            if ($myLike) {
+                $result['i_like_it'] = true;
+            }
+
             $result['item'] = $publication;
             $result['status'] = true;
             $result['message'] = "Found publication";

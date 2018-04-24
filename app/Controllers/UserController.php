@@ -108,7 +108,7 @@ class UserController extends BaseController
             try {
                 /*Verificar si es un username valido*/
                 $password = Helpers::makeHash($body['password']);
-                $userExist = User::where('username', '=', $username)->first();
+                $userExist = User::where('username', '=', $username)->orWhere('email', '=', $email)->first();
                 if (!$userExist) {
                     $user = new User();
                     $user->username = $username;
@@ -121,7 +121,7 @@ class UserController extends BaseController
                     $result['message'] = 'User created successful';
                     return $response->withJson($result, 200);
                 } else {
-                    $result['message'] = 'Field username is not unique';
+                    $result['message'] = 'Fields username and email are unique';
                     return $response->withJson($result, 500);
                 }
             } catch (\Exception $ex) {
@@ -143,7 +143,6 @@ class UserController extends BaseController
     {
         $result = array(
             'status' => false,
-            'item' => array(),
             'message' => '',
         );
 
@@ -166,7 +165,7 @@ class UserController extends BaseController
                 $result['message'] = 'User updated success';
                 return $response->withJson($result, 200);
             } else {
-                $result['message'] = 'Field username is not unique';
+                $result['message'] = 'Fields username and email are unique';
                 return $response->withJson($result, 500);
             }
         } catch (\Exception $ex) {
@@ -198,7 +197,7 @@ class UserController extends BaseController
                     $userSession = $this->session->get('user');
                     $user = User::where('id_user', '=', $userSession->id_user)->where('password', '=', $password)->first();
                     if ($user) {
-                        $user->password = User::makePassword($new_password_1);
+                        $user->password = Helpers::makeHash($new_password_1);
                         $user->save();
                         $result['status'] = true;
                         $result['message'] = 'Password updated success';
@@ -312,12 +311,10 @@ class UserController extends BaseController
             'message' => '',
         );
 
-        $body = $request->getParsedBody();
-        $text = trim($body['text']);
+        $text = trim($args['text']);
 
         if ($text != '') {
             try {
-                $userSession = $this->session->get('user');
                 $users = User::where('name', 'LIKE', "%$text%")
                     ->orWhere('username', 'LIKE', "%$text%")->get();
                 $result['status'] = true;
@@ -368,12 +365,12 @@ class UserController extends BaseController
 
             $user = User::findOrFail($userLogged->id_user);
             $user->name_file_photo = $new_name_file;
-            $user->path_photo = "/api/v1/storage/u/$userLogged->username/profile.jpg";
+            $user->path_photo = "/api/v1/storage/u/$userLogged->id_user/profile.jpg";
             $user->save();
 
             $result['status'] = true;
             $result['message'] = "Photo profile created successful";
-            $result['publication'] = $user;
+            $result['item'] = $user;
             return $response->withJson($result, 200);
         } catch (\Exception $ex) {
             $result['message'] = "Error when creating Photo profile";
@@ -390,7 +387,7 @@ class UserController extends BaseController
         );
 
         try {
-            $user = User::where('username', '=', $args['username'])->firstOrFail();
+            $user = User::findOrFail($args['id_user']);
             $new_name_file = $user->name_file_photo;
             $file = Helpers::get_path_user($user->id_user, $new_name_file);
 
