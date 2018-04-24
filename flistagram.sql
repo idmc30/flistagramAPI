@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.4
+-- version 4.8.0
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 07-04-2018 a las 07:10:19
--- Versión del servidor: 10.1.29-MariaDB
--- Versión de PHP: 7.2.0
+-- Tiempo de generación: 24-04-2018 a las 02:59:17
+-- Versión del servidor: 10.1.31-MariaDB
+-- Versión de PHP: 7.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -29,11 +29,12 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `comment` (
-  `idComment` int(11) NOT NULL,
+  `id_comment` int(11) NOT NULL,
   `text` varchar(2000) NOT NULL,
-  `idUser` int(11) NOT NULL,
-  `idPublication` int(11) NOT NULL,
-  `dateCreation` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `id_user` int(11) NOT NULL,
+  `id_publication` int(11) NOT NULL,
+  `created_at` date NOT NULL,
+  `updated_at` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -43,10 +44,11 @@ CREATE TABLE `comment` (
 --
 
 CREATE TABLE `connection` (
-  `idConnection` int(11) NOT NULL,
-  `idUserFollower` int(11) NOT NULL,
-  `dateCreation` datetime NOT NULL,
-  `idUserFollowee` int(11) DEFAULT NULL
+  `id_connection` int(11) NOT NULL,
+  `id_follower` int(11) NOT NULL,
+  `id_to_follow` int(11) DEFAULT NULL,
+  `created_at` date NOT NULL,
+  `updated_at` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -56,10 +58,12 @@ CREATE TABLE `connection` (
 --
 
 CREATE TABLE `like` (
-  `idLike` int(11) NOT NULL,
-  `idUser` int(11) NOT NULL,
-  `idPublication` int(11) NOT NULL,
-  `dateCreation` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `state` tinyint(1) NOT NULL,
+  `id_like` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `id_publication` int(11) NOT NULL,
+  `updated_at` date NOT NULL,
+  `created_at` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -69,9 +73,12 @@ CREATE TABLE `like` (
 --
 
 CREATE TABLE `photo` (
-  `idPhoto` int(11) NOT NULL,
-  `pathPhoto` varchar(45) NOT NULL,
-  `idPublication` int(11) NOT NULL
+  `id_photo` int(11) NOT NULL,
+  `path_photo` varchar(255) NOT NULL,
+  `id_publication` int(11) NOT NULL,
+  `updated_at` date NOT NULL,
+  `created_at` date NOT NULL,
+  `public_path` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -81,10 +88,12 @@ CREATE TABLE `photo` (
 --
 
 CREATE TABLE `publication` (
-  `idPublication` int(11) NOT NULL,
-  `dateCreation` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `idUser` int(11) DEFAULT NULL,
-  `location` varchar(150) DEFAULT NULL
+  `id_publication` int(11) NOT NULL,
+  `id_user` int(11) DEFAULT NULL,
+  `location` varchar(150) DEFAULT NULL,
+  `updated_at` date NOT NULL,
+  `created_at` date NOT NULL,
+  `description` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -94,24 +103,16 @@ CREATE TABLE `publication` (
 --
 
 CREATE TABLE `user` (
-  `idUser` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
   `username` varchar(60) NOT NULL,
   `name` varchar(60) NOT NULL,
   `password` varchar(255) NOT NULL,
   `email` varchar(255) DEFAULT NULL,
-  `pathPhotoAvatar` varchar(255) NOT NULL,
+  `path_photo` varchar(255) NOT NULL,
+  `name_file_photo` varchar(255) NOT NULL,
   `updated_at` date NOT NULL,
   `created_at` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Volcado de datos para la tabla `user`
---
-
-INSERT INTO `user` (`idUser`, `username`, `name`, `password`, `email`, `pathPhotoAvatar`, `updated_at`, `created_at`) VALUES
-(1, 'ismael14', 'Ismael Cortegana', '827ccb0eea8a706c4c34a16891f84e7b', 'ismael14@hootmail.com', 'http://localhost/phpmyadmin/tbl_change.php?db=flistagram&table=user', '0000-00-00', '0000-00-00'),
-(2, 'flisgroup', 'Carmen Malla', 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3', 'richandrb.17@gmail.com', '', '2018-04-04', '2018-04-04'),
-(3, 'dev_cort', 'Daniel', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'danielcoretgaana@gmail.com', '', '2018-04-05', '2018-04-05');
 
 --
 -- Índices para tablas volcadas
@@ -121,44 +122,47 @@ INSERT INTO `user` (`idUser`, `username`, `name`, `password`, `email`, `pathPhot
 -- Indices de la tabla `comment`
 --
 ALTER TABLE `comment`
-  ADD PRIMARY KEY (`idComment`),
-  ADD KEY `fk_COMMENT_user1_idx` (`idUser`),
-  ADD KEY `fk_COMMENT_PUBLICATION1_idx` (`idPublication`);
+  ADD PRIMARY KEY (`id_comment`),
+  ADD KEY `fk_COMMENT_user1_idx` (`id_user`),
+  ADD KEY `fk_COMMENT_PUBLICATION1_idx` (`id_publication`);
 
 --
 -- Indices de la tabla `connection`
 --
 ALTER TABLE `connection`
-  ADD PRIMARY KEY (`idConnection`),
-  ADD KEY `fk_CONNECTION_user1_idx` (`idUserFollowee`);
+  ADD PRIMARY KEY (`id_connection`),
+  ADD KEY `fk_CONNECTION_user1_idx` (`id_to_follow`),
+  ADD KEY `FK_FOLLOWER_CONNECTION_USER` (`id_follower`) USING BTREE;
 
 --
 -- Indices de la tabla `like`
 --
 ALTER TABLE `like`
-  ADD PRIMARY KEY (`idUser`,`idPublication`),
-  ADD UNIQUE KEY `UNICO_LIKE` (`idLike`),
-  ADD KEY `fk_LIKE_PUBLICATION1_idx` (`idPublication`);
+  ADD PRIMARY KEY (`id_user`,`id_publication`),
+  ADD UNIQUE KEY `UNICO_LIKE` (`id_like`),
+  ADD KEY `fk_LIKE_PUBLICATION1_idx` (`id_publication`);
 
 --
 -- Indices de la tabla `photo`
 --
 ALTER TABLE `photo`
-  ADD PRIMARY KEY (`idPhoto`),
-  ADD KEY `fk_PHOTO_PUBLICATION1_idx` (`idPublication`);
+  ADD PRIMARY KEY (`id_photo`),
+  ADD KEY `fk_PHOTO_PUBLICATION1_idx` (`id_publication`);
 
 --
 -- Indices de la tabla `publication`
 --
 ALTER TABLE `publication`
-  ADD PRIMARY KEY (`idPublication`),
-  ADD KEY `fk_PUBLICATION_user1_idx` (`idUser`);
+  ADD PRIMARY KEY (`id_publication`),
+  ADD KEY `fk_PUBLICATION_user1_idx` (`id_user`);
 
 --
 -- Indices de la tabla `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`idUser`);
+  ADD PRIMARY KEY (`id_user`),
+  ADD UNIQUE KEY `username` (`username`),
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -168,37 +172,37 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT de la tabla `comment`
 --
 ALTER TABLE `comment`
-  MODIFY `idComment` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_comment` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `connection`
 --
 ALTER TABLE `connection`
-  MODIFY `idConnection` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_connection` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `like`
 --
 ALTER TABLE `like`
-  MODIFY `idLike` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_like` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `photo`
 --
 ALTER TABLE `photo`
-  MODIFY `idPhoto` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_photo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT de la tabla `publication`
 --
 ALTER TABLE `publication`
-  MODIFY `idPublication` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_publication` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT de la tabla `user`
 --
 ALTER TABLE `user`
-  MODIFY `idUser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Restricciones para tablas volcadas
@@ -208,33 +212,34 @@ ALTER TABLE `user`
 -- Filtros para la tabla `comment`
 --
 ALTER TABLE `comment`
-  ADD CONSTRAINT `fk_COMMENT_PUBLICATION1` FOREIGN KEY (`idPublication`) REFERENCES `publication` (`idPublication`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_COMMENT_user1` FOREIGN KEY (`idUser`) REFERENCES `user` (`idUser`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_COMMENT_PUBLICATION1` FOREIGN KEY (`id_publication`) REFERENCES `publication` (`id_publication`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_COMMENT_user1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `connection`
 --
 ALTER TABLE `connection`
-  ADD CONSTRAINT `fk_CONNECTION_user1` FOREIGN KEY (`idUserFollowee`) REFERENCES `user` (`idUser`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `connection_ibfk_1` FOREIGN KEY (`id_follower`) REFERENCES `user` (`id_user`),
+  ADD CONSTRAINT `fk_CONNECTION_user1` FOREIGN KEY (`id_to_follow`) REFERENCES `user` (`id_user`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `like`
 --
 ALTER TABLE `like`
-  ADD CONSTRAINT `fk_LIKE_PUBLICATION1` FOREIGN KEY (`idPublication`) REFERENCES `publication` (`idPublication`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_LIKE_user1` FOREIGN KEY (`idUser`) REFERENCES `user` (`idUser`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_LIKE_PUBLICATION1` FOREIGN KEY (`id_publication`) REFERENCES `publication` (`id_publication`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_LIKE_user1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `photo`
 --
 ALTER TABLE `photo`
-  ADD CONSTRAINT `fk_PHOTO_PUBLICATION1` FOREIGN KEY (`idPublication`) REFERENCES `publication` (`idPublication`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_PHOTO_PUBLICATION1` FOREIGN KEY (`id_publication`) REFERENCES `publication` (`id_publication`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `publication`
 --
 ALTER TABLE `publication`
-  ADD CONSTRAINT `fk_PUBLICATION_user1` FOREIGN KEY (`idUser`) REFERENCES `user` (`idUser`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_PUBLICATION_user1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
