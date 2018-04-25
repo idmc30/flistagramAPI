@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-04-2018 a las 02:59:17
+-- Tiempo de generación: 25-04-2018 a las 14:06:06
 -- Versión del servidor: 10.1.31-MariaDB
 -- Versión de PHP: 7.2.4
 
@@ -37,6 +37,15 @@ CREATE TABLE `comment` (
   `updated_at` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Volcado de datos para la tabla `comment`
+--
+
+INSERT INTO `comment` (`id_comment`, `text`, `id_user`, `id_publication`, `created_at`, `updated_at`) VALUES
+(7, 'Que tal comentario papurrin', 7, 24, '2018-04-23', '2018-04-23'),
+(8, 'Que tal comentario papurrin', 7, 24, '2018-04-23', '2018-04-23'),
+(9, 'Que tal comentario papurrin', 7, 24, '2018-04-24', '2018-04-24');
+
 -- --------------------------------------------------------
 
 --
@@ -58,13 +67,19 @@ CREATE TABLE `connection` (
 --
 
 CREATE TABLE `like` (
-  `state` tinyint(1) NOT NULL,
   `id_like` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
   `id_publication` int(11) NOT NULL,
   `updated_at` date NOT NULL,
   `created_at` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `like`
+--
+
+INSERT INTO `like` (`id_like`, `id_user`, `id_publication`, `updated_at`, `created_at`) VALUES
+(4, 7, 24, '2018-04-23', '2018-04-23');
 
 -- --------------------------------------------------------
 
@@ -81,6 +96,15 @@ CREATE TABLE `photo` (
   `public_path` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Volcado de datos para la tabla `photo`
+--
+
+INSERT INTO `photo` (`id_photo`, `path_photo`, `id_publication`, `updated_at`, `created_at`, `public_path`) VALUES
+(23, '7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b2451Ohqq4Y.jpg', 24, '2018-04-23', '2018-04-23', '/api/v1/storage/24/image.jpg'),
+(24, '7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b24519iTrcn.jpg', 25, '2018-04-23', '2018-04-23', '/api/v1/storage/25/image.jpg'),
+(25, '7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b2451eIhRBw.jpg', 26, '2018-04-24', '2018-04-24', '/api/v1/storage/26/image.jpg');
+
 -- --------------------------------------------------------
 
 --
@@ -95,6 +119,15 @@ CREATE TABLE `publication` (
   `created_at` date NOT NULL,
   `description` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `publication`
+--
+
+INSERT INTO `publication` (`id_publication`, `id_user`, `location`, `updated_at`, `created_at`, `description`) VALUES
+(24, 7, 'Peru', '2018-04-23', '2018-04-23', 'Mira esta descripción papu'),
+(25, 7, 'Peru', '2018-04-23', '2018-04-23', 'Mira esta descripción papu'),
+(26, 7, 'Peru', '2018-04-24', '2018-04-24', 'Mira esta descripción papu');
 
 -- --------------------------------------------------------
 
@@ -113,6 +146,15 @@ CREATE TABLE `user` (
   `updated_at` date NOT NULL,
   `created_at` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `user`
+--
+
+INSERT INTO `user` (`id_user`, `username`, `name`, `password`, `email`, `path_photo`, `name_file_photo`, `updated_at`, `created_at`) VALUES
+(6, 'dev_cort', 'Ismael', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'miemal@gmail.com', '', '', '2018-04-23', '2018-04-23'),
+(7, 'dev_cortesito', 'Ismael Cotegana', '5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5', 'ismael@mfial.com', '/api/v1/storage/u/7/profile.jpg', '7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b2451svjesq.jpg', '2018-04-23', '2018-04-23'),
+(8, 'josepepe', 'Jose', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'misemal@gmail.com', '', '', '2018-04-24', '2018-04-24');
 
 --
 -- Índices para tablas volcadas
@@ -172,37 +214,37 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT de la tabla `comment`
 --
 ALTER TABLE `comment`
-  MODIFY `id_comment` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_comment` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `connection`
 --
 ALTER TABLE `connection`
-  MODIFY `id_connection` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_connection` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `like`
 --
 ALTER TABLE `like`
-  MODIFY `id_like` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_like` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `photo`
 --
 ALTER TABLE `photo`
-  MODIFY `id_photo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id_photo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT de la tabla `publication`
 --
 ALTER TABLE `publication`
-  MODIFY `id_publication` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id_publication` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT de la tabla `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Restricciones para tablas volcadas
