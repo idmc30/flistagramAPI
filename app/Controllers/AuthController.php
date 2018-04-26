@@ -24,7 +24,7 @@ class AuthController extends BaseController
 		$body = $request->getParsedBody();
 		$username = $body[ 'username' ];
 		$password = $body[ 'password' ];
-
+        $result['body'] = $body;
 		if ( trim($username) != '' && trim($password) != '' ) {
 			try {
 				$password = hash('sha256', $body[ 'password' ]);

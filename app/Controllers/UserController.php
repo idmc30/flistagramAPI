@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controllers;
+use Firebase\JWT\JWT;
 
 use App\Includes\Helpers;
 use App\Models\User;
@@ -116,6 +117,15 @@ class UserController extends BaseController
                     $user->password = $password;
                     $user->email = $email;
                     $user->save();
+
+                    $jwt_data = $this->container->get('settings')[ 'app' ][ 'data_jwt' ];
+                    $jwt_data[ 'data' ] = [
+                        'username' => $user->username,
+                        'email' => $user->email,
+                        'id_user' => $user->id_user,
+                    ];
+                    $jwt = JWT::encode($jwt_data, $this->container->get('settings')[ 'app' ][ 'key_jtw' ]);
+                    $result[ 'token' ] = $jwt;
                     $result['status'] = true;
                     $result['item'] = $user->toArray();
                     $result['message'] = 'User created successful';
