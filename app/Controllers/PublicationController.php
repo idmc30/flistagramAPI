@@ -206,28 +206,24 @@ class PublicationController extends BaseController
         $user_logged = $this->session->get('user');
 
         try {
-            $publications = Publication::all();
 
-            foreach ($publications as $publication) {
-                $publication->user;
-                $publication->photo;
-                foreach ($publication->comments as $comment) {
-                    $comment->user;
-                }
+            $user = User::findOrFail($user_logged->id_user);
 
-                $i_like_it = false;
+            /*$result['followed'] = $user->followed;*/
 
-                foreach ($publication->likes as $like) {
-                    $user = $like->user;
-                    if ($user_logged->id_user == $user->id_user) {
-                        $i_like_it = true;
+            $result['item'] = [];
+            foreach ($user->followed as $followed) {
+                foreach (User::find($followed->id_to_follow)->publications as $publication) {
+                    $publication->photo;
+                    $publication->likes;
+                    foreach ($publication->comments as $comment){
+                        $comment->user;
                     }
+                    $publication->user;
+                    $result['item'][] = $publication;
                 }
-
-                $publication->i_like_it = $i_like_it;
             }
 
-            $result['item'] = $publications->toArray();
             $result['status'] = true;
             $result['message'] = "Found publication";
             return $response->withJson($result, 200);

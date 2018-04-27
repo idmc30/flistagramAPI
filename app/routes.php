@@ -20,7 +20,7 @@ $app->group('/api/v1', function () {
 
     /* Routes for User */
     $this->group('/user', function () {
-        $this->get('/all', 'UserController:all_users');
+        $this->get('/all', 'UserController:all_users')->add(new AuthMiddleware());
         /* Group*/
         $this->get('/profile/{username}', 'UserController:user_profile')->add(new AuthMiddleware());//*
         $this->get('/profile', 'UserController:my_profile')->add(new AuthMiddleware());//*

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controllers;
+
 use Firebase\JWT\JWT;
 
 use App\Includes\Helpers;
@@ -26,15 +27,27 @@ class UserController extends BaseController
         );
 
         $users = User::all();
+        $userSession = $this->session->get('user');
 
         if (!empty($users)) {
-            $result['status'] = true;
+
+            foreach ($users as $user) {
+                $user->i_follow_it = false;
+                foreach ($user->followers as $user_follow) {
+                    $user_follow->follower;
+                    if ($user_follow->follower->id_user == $userSession->id_user) {
+                        $user->i_follow_it = true;
+                    }
+                }
+            }
+
             $result['items'] = $users->toArray();
+            $result['status'] = true;
             $result['message'] = 'All users';
             return $response->withJson($result, 200);
         } else {
             $result['message'] = 'Users not found';
-            return $response->withJson($result, 404);
+            return $response->withJson($result, 200);
         }
     }
 
@@ -118,14 +131,14 @@ class UserController extends BaseController
                     $user->email = $email;
                     $user->save();
 
-                    $jwt_data = $this->container->get('settings')[ 'app' ][ 'data_jwt' ];
-                    $jwt_data[ 'data' ] = [
+                    $jwt_data = $this->container->get('settings')['app']['data_jwt'];
+                    $jwt_data['data'] = [
                         'username' => $user->username,
                         'email' => $user->email,
                         'id_user' => $user->id_user,
                     ];
-                    $jwt = JWT::encode($jwt_data, $this->container->get('settings')[ 'app' ][ 'key_jtw' ]);
-                    $result[ 'token' ] = $jwt;
+                    $jwt = JWT::encode($jwt_data, $this->container->get('settings')['app']['key_jtw']);
+                    $result['token'] = $jwt;
                     $result['status'] = true;
                     $result['item'] = $user->toArray();
                     $result['message'] = 'User created successful';
@@ -243,7 +256,7 @@ class UserController extends BaseController
             'status' => false,
             'message' => '',
         );
-
+        $userSession = $this->session->get('user');
         $username = trim($args['username']);
 
         if ($username != '') {
@@ -253,12 +266,19 @@ class UserController extends BaseController
                     $publication->photo;
                     $publication->likes;
                 }
+
+                $result['i_follow_it'] = false;
                 foreach ($user->followers as $user_follow) {
                     $user_follow->follower;
+                    if ($user_follow->follower->id_user == $userSession->id_user) {
+                        $result['i_follow_it'] = true;
+                    }
                 }
+
                 foreach ($user->followed as $user_followed) {
                     $user_followed->followed;
                 }
+
                 $result['status'] = true;
                 $result['item'] = $user->toArray();
                 $result['message'] = 'User finding successful';

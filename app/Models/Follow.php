@@ -15,7 +15,7 @@ class Follow extends Model
 
     protected $primaryKey = 'id_connection';
 
-    protected $hidden = ['created_at', "id_follower", "id_to_follow", 'updated_at'];
+/*    protected $hidden = ['created_at', "id_follower", "id_to_follow", 'updated_at'];*/
 
     public function follower()
     {
