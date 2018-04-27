@@ -54,7 +54,7 @@ class PublicationController extends BaseController
             $photo = new Photo();
             $photo->path_photo = $new_name_file;
             $photo->id_publication = $publication->id_publication;
-            $photo->public_path = "/api/v1/storage/$publication->id_publication/image.jpg";
+            $photo->public_path = "/api/v1/storage/pub/$publication->id_publication/image.jpg";
             $photo->save();
             /* Get data of publication*/
             $publication->user;
@@ -141,9 +141,17 @@ class PublicationController extends BaseController
             $publication = Publication::findOrFail($id_publication);
             $publication->user;
             $publication->photo;
+            $i_like_it = false;
+
             foreach ($publication->likes as $like) {
-                $like->user;
+                $user = $like->user;
+                if ($user_logged->id_user == $user->id_user) {
+                    $i_like_it = true;
+                }
             }
+
+            $publication->i_like_it = $i_like_it;
+
             foreach ($publication->comments as $comment) {
                 $comment->user;
             }
@@ -202,9 +210,17 @@ class PublicationController extends BaseController
                 foreach ($publication->comments as $comment) {
                     $comment->user;
                 }
+
+                $i_like_it = false;
+
                 foreach ($publication->likes as $like) {
-                    $like->user;
+                    $user = $like->user;
+                    if ($user_logged->id_user == $user->id_user) {
+                        $i_like_it = true;
+                    }
                 }
+
+                $publication->i_like_it = $i_like_it;
             }
 
             $result['item'] = $publications->toArray();

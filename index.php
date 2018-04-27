@@ -6,6 +6,8 @@
 |---------------------------------------------------------------------------------------------------
 */
 
+header('Access-Control-Allow-Origin: *');
+
 date_default_timezone_set("America/Lima");
 
 require_once dirname(__FILE__) . '/constant.php';

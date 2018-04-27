@@ -22,7 +22,7 @@ $app->group('/api/v1', function () {
     $this->group('/user', function () {
         $this->get('/all', 'UserController:all_users');
         /* Group*/
-        $this->get('/profile/{username}', 'UserController:user_profile');//*
+        $this->get('/profile/{username}', 'UserController:user_profile')->add(new AuthMiddleware());//*
         $this->get('/profile', 'UserController:my_profile')->add(new AuthMiddleware());//*
         $this->post('/profile/photo', 'UserController:upload_photo_profile')->add(new AuthMiddleware());//*
       /*  $this->get('/data/{id}', 'UserController:user_id');*/
