@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-04-2018 a las 20:34:06
+-- Tiempo de generación: 28-04-2018 a las 07:50:04
 -- Versión del servidor: 10.1.31-MariaDB
 -- Versión de PHP: 7.2.4
 
@@ -37,33 +37,6 @@ CREATE TABLE `comment` (
   `updated_at` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Volcado de datos para la tabla `comment`
---
-
-INSERT INTO `comment` (`id_comment`, `text`, `id_user`, `id_publication`, `created_at`, `updated_at`) VALUES
-(7, 'Que tal comentario papurrin', 7, 24, '2018-04-23', '2018-04-23'),
-(8, 'Que tal comentario papurrin', 7, 24, '2018-04-23', '2018-04-23'),
-(9, 'Que tal comentario papurrin', 7, 24, '2018-04-24', '2018-04-24'),
-(10, 'Mira este comentario papurrin', 6, 24, '2018-04-26', '2018-04-26'),
-(11, 'Comentario', 6, 25, '2018-04-26', '2018-04-26'),
-(12, 'cscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscs', 6, 25, '2018-04-26', '2018-04-26'),
-(13, 'cscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscs', 6, 25, '2018-04-26', '2018-04-26'),
-(14, 'cscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscscs', 6, 25, '2018-04-26', '2018-04-26'),
-(15, 'asodmaosmd :3', 6, 25, '2018-04-26', '2018-04-26'),
-(16, 'Hola', 7, 24, '2018-04-26', '2018-04-26'),
-(17, 'mira este comentario papurrin', 7, 25, '2018-04-26', '2018-04-26'),
-(18, 'ascs', 7, 25, '2018-04-26', '2018-04-26'),
-(19, 'ascscscsc', 7, 25, '2018-04-26', '2018-04-26'),
-(20, 'ascscscsc', 7, 25, '2018-04-26', '2018-04-26'),
-(21, 'ascscs', 7, 25, '2018-04-26', '2018-04-26'),
-(22, 'cscascsc', 7, 25, '2018-04-26', '2018-04-26'),
-(23, 'ascscs', 7, 25, '2018-04-26', '2018-04-26'),
-(24, 'ascsc', 7, 25, '2018-04-26', '2018-04-26'),
-(25, 'mira comeento', 7, 24, '2018-04-26', '2018-04-26'),
-(26, 'Comentario', 6, 27, '2018-04-27', '2018-04-27'),
-(27, 'Hola', 7, 30, '2018-04-27', '2018-04-27');
-
 -- --------------------------------------------------------
 
 --
@@ -83,8 +56,8 @@ CREATE TABLE `connection` (
 --
 
 INSERT INTO `connection` (`id_connection`, `id_follower`, `id_to_follow`, `created_at`, `updated_at`) VALUES
-(7, 7, 6, '2018-04-27', '2018-04-27'),
-(10, 6, 7, '2018-04-27', '2018-04-27');
+(11, 14, 13, '2018-04-28', '2018-04-28'),
+(12, 13, 14, '2018-04-28', '2018-04-28');
 
 -- --------------------------------------------------------
 
@@ -105,14 +78,8 @@ CREATE TABLE `like` (
 --
 
 INSERT INTO `like` (`id_like`, `id_user`, `id_publication`, `updated_at`, `created_at`) VALUES
-(9, 6, 24, '2018-04-26', '2018-04-26'),
-(16, 6, 27, '2018-04-27', '2018-04-27'),
-(15, 6, 30, '2018-04-27', '2018-04-27'),
-(18, 6, 33, '2018-04-27', '2018-04-27'),
-(13, 7, 24, '2018-04-26', '2018-04-26'),
-(11, 7, 25, '2018-04-26', '2018-04-26'),
-(12, 7, 26, '2018-04-26', '2018-04-26'),
-(17, 7, 29, '2018-04-27', '2018-04-27');
+(19, 14, 37, '2018-04-28', '2018-04-28'),
+(20, 14, 39, '2018-04-28', '2018-04-28');
 
 -- --------------------------------------------------------
 
@@ -134,18 +101,18 @@ CREATE TABLE `photo` (
 --
 
 INSERT INTO `photo` (`id_photo`, `path_photo`, `id_publication`, `updated_at`, `created_at`, `public_path`) VALUES
-(23, '7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b2451Ohqq4Y.jpg', 24, '2018-04-23', '2018-04-23', '/api/v1/storage/pub/24/image.jpg'),
-(24, '7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b24519iTrcn.jpg', 25, '2018-04-23', '2018-04-23', '/api/v1/storage/pub/25/image.jpg'),
-(25, '7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b2451eIhRBw.jpg', 26, '2018-04-24', '2018-04-24', '/api/v1/storage/pub/26/image.jpg'),
-(26, '7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b2451w9pF1j.jpg', 27, '2018-04-27', '2018-04-27', '/api/v1/storage/pub/27/image.jpg'),
-(28, 'e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683OKIgNA.jpg', 29, '2018-04-27', '2018-04-27', '/api/v1/storage/pub/29/image.jpg'),
-(29, 'e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683W5J6az.jpg', 30, '2018-04-27', '2018-04-27', '/api/v1/storage/pub/30/image.jpg'),
-(30, 'e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683s9zykv.jpg', 31, '2018-04-27', '2018-04-27', '/api/v1/storage/pub/31/image.jpg'),
-(31, 'e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683vVP3oF.jpg', 32, '2018-04-27', '2018-04-27', '/api/v1/storage/pub/32/image.jpg'),
-(32, '7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b2451VZkf8G.jpg', 33, '2018-04-27', '2018-04-27', '/api/v1/storage/pub/33/image.jpg'),
-(33, '7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b24511zwjeO.jpg', 34, '2018-04-27', '2018-04-27', '/api/v1/storage/pub/34/image.jpg'),
-(34, '6b51d431df5d7f141cbececcf79edf3dd861c3b4069f0b11661a3eefacbba918CP1voX.jpg', 35, '2018-04-27', '2018-04-27', '/api/v1/storage/pub/35/image.jpg'),
-(35, '6b51d431df5d7f141cbececcf79edf3dd861c3b4069f0b11661a3eefacbba918goQx7c.jpg', 36, '2018-04-27', '2018-04-27', '/api/v1/storage/pub/36/image.jpg');
+(36, '8527a891e224136950ff32ca212b45bc93f69fbb801c3b1ebedac52775f99e61Nfjk9Y.jpg', 37, '2018-04-28', '2018-04-28', '/api/v1/storage/pub/37/image.jpg'),
+(37, '8527a891e224136950ff32ca212b45bc93f69fbb801c3b1ebedac52775f99e61r8umy8.jpg', 38, '2018-04-28', '2018-04-28', '/api/v1/storage/pub/38/image.jpg'),
+(38, '8527a891e224136950ff32ca212b45bc93f69fbb801c3b1ebedac52775f99e611ziYqb.jpg', 39, '2018-04-28', '2018-04-28', '/api/v1/storage/pub/39/image.jpg'),
+(39, '8527a891e224136950ff32ca212b45bc93f69fbb801c3b1ebedac52775f99e61dOwsyo.jpg', 40, '2018-04-28', '2018-04-28', '/api/v1/storage/pub/40/image.jpg'),
+(40, '8527a891e224136950ff32ca212b45bc93f69fbb801c3b1ebedac52775f99e615xfsZn.jpg', 41, '2018-04-28', '2018-04-28', '/api/v1/storage/pub/41/image.jpg'),
+(41, '8527a891e224136950ff32ca212b45bc93f69fbb801c3b1ebedac52775f99e61lONk4P.jpg', 42, '2018-04-28', '2018-04-28', '/api/v1/storage/pub/42/image.jpg'),
+(42, '3fdba35f04dc8c462986c992bcf875546257113072a909c162f7e470e581e278gzSv6J.jpg', 43, '2018-04-28', '2018-04-28', '/api/v1/storage/pub/43/image.jpg'),
+(43, '3fdba35f04dc8c462986c992bcf875546257113072a909c162f7e470e581e27894GolM.jpg', 44, '2018-04-28', '2018-04-28', '/api/v1/storage/pub/44/image.jpg'),
+(44, '3fdba35f04dc8c462986c992bcf875546257113072a909c162f7e470e581e278Zix3TP.jpg', 45, '2018-04-28', '2018-04-28', '/api/v1/storage/pub/45/image.jpg'),
+(45, '3fdba35f04dc8c462986c992bcf875546257113072a909c162f7e470e581e278jYlv8x.jpg', 46, '2018-04-28', '2018-04-28', '/api/v1/storage/pub/46/image.jpg'),
+(46, '3fdba35f04dc8c462986c992bcf875546257113072a909c162f7e470e581e278K2QewY.jpg', 47, '2018-04-28', '2018-04-28', '/api/v1/storage/pub/47/image.jpg'),
+(47, '3fdba35f04dc8c462986c992bcf875546257113072a909c162f7e470e581e278OW79JS.jpg', 48, '2018-04-28', '2018-04-28', '/api/v1/storage/pub/48/image.jpg');
 
 -- --------------------------------------------------------
 
@@ -167,18 +134,18 @@ CREATE TABLE `publication` (
 --
 
 INSERT INTO `publication` (`id_publication`, `id_user`, `location`, `updated_at`, `created_at`, `description`) VALUES
-(24, 7, 'Peru', '2018-04-23', '2018-04-23', 'Mira esta descripción papu'),
-(25, 7, 'Peru', '2018-04-23', '2018-04-23', 'Mira esta descripción papu'),
-(26, 7, 'Peru', '2018-04-24', '2018-04-24', 'Mira esta descripción papu'),
-(27, 7, 'Peru', '2018-04-27', '2018-04-27', 'Publicacion de publicaciones :V'),
-(29, 6, 'China', '2018-04-27', '2018-04-27', 'Mi descripcion'),
-(30, 6, 'China', '2018-04-27', '2018-04-27', 'Montañas'),
-(31, 6, 'cas', '2018-04-27', '2018-04-27', 'csc'),
-(32, 6, 'scs', '2018-04-27', '2018-04-27', 'casc'),
-(33, 7, 'csc', '2018-04-27', '2018-04-27', 'cas'),
-(34, 7, 'Peru', '2018-04-27', '2018-04-27', 'Publicacion de publicaciones :V'),
-(35, 12, 'd', '2018-04-27', '2018-04-27', 'd'),
-(36, 12, 'd', '2018-04-27', '2018-04-27', 'd');
+(37, 14, 'Perú', '2018-04-28', '2018-04-28', 'Montañas'),
+(38, 14, 'Ni idea', '2018-04-28', '2018-04-28', 'Selfie'),
+(39, 14, 'Nose', '2018-04-28', '2018-04-28', 'Animal'),
+(40, 14, 'a', '2018-04-28', '2018-04-28', 'a'),
+(41, 14, 'w', '2018-04-28', '2018-04-28', 'wolf'),
+(42, 14, 'ad', '2018-04-28', '2018-04-28', 'horser'),
+(43, 13, 'a', '2018-04-28', '2018-04-28', 'a'),
+(44, 13, 'a', '2018-04-28', '2018-04-28', 'a'),
+(45, 13, '', '2018-04-28', '2018-04-28', ''),
+(46, 13, '', '2018-04-28', '2018-04-28', ''),
+(47, 13, '', '2018-04-28', '2018-04-28', ''),
+(48, 13, '', '2018-04-28', '2018-04-28', '');
 
 -- --------------------------------------------------------
 
@@ -203,13 +170,8 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id_user`, `username`, `name`, `password`, `email`, `path_photo`, `name_file_photo`, `updated_at`, `created_at`) VALUES
-(6, 'dev_cort', 'Ismael', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'miemal@gmail.com', '/api/v1/storage/u/6/profile.jpg', 'e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683FofKPI.jpg', '2018-04-27', '2018-04-23'),
-(7, 'dev_cortesito', 'Ismael Cotegana', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'ismael@mfial.com', '/api/v1/storage/u/7/profile.jpg', '7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b2451svjesq.jpg', '2018-04-23', '2018-04-23'),
-(8, 'josepepe', 'Jose', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'misemal@gmail.com', '', '', '2018-04-24', '2018-04-24'),
-(9, 'ismael14_16', 'CSGO', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'Charles@4abyte.ca', '', '', '2018-04-27', '2018-04-27'),
-(10, 'demo', 'Ismael Luis ', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'pazduradera9@hotmail.com', '', '', '2018-04-27', '2018-04-27'),
-(11, 'demo1', 'Internet Software & Services', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'ismael134_16@hotmail.com', '', '', '2018-04-27', '2018-04-27'),
-(12, 'ismaSocial', 'csgo_logo_2.png', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'icortegana@unprg.edu.pe', '', '', '2018-04-27', '2018-04-27');
+(13, 'dev_cort', 'Ismael Luis ', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'ismael14_16@hotmail.com', '/api/v1/storage/u/13/profile.jpg', '3fdba35f04dc8c462986c992bcf875546257113072a909c162f7e470e581e278oPa0L9.jpg', '2018-04-28', '2018-04-28'),
+(14, 'andree_ramos', 'Richard Ramos', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'andre@gmail.com', '/api/v1/storage/u/14/profile.jpg', '8527a891e224136950ff32ca212b45bc93f69fbb801c3b1ebedac52775f99e61BLPao6.jpg', '2018-04-28', '2018-04-28');
 
 --
 -- Índices para tablas volcadas
@@ -275,31 +237,31 @@ ALTER TABLE `comment`
 -- AUTO_INCREMENT de la tabla `connection`
 --
 ALTER TABLE `connection`
-  MODIFY `id_connection` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_connection` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `like`
 --
 ALTER TABLE `like`
-  MODIFY `id_like` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id_like` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `photo`
 --
 ALTER TABLE `photo`
-  MODIFY `id_photo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id_photo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT de la tabla `publication`
 --
 ALTER TABLE `publication`
-  MODIFY `id_publication` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id_publication` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT de la tabla `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- Restricciones para tablas volcadas
